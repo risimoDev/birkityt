@@ -1,6 +1,14 @@
-RewriteEngine On
+# /var/www/birkityt/.htaccess
+<IfModule mod_rewrite.c>
+  RewriteEngine On
 
-# Если запрашивается путь без расширения, пробуем добавить .php
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule ^([^\.]+)$ $1.php [NC,L]
+  # Запретить прямой доступ к .htaccess
+  <Files ".htaccess">
+    Require all denied
+  </Files>
+
+  # Если запрашивается путь без расширения — пробуем добавить .php
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteRule ^([^\.]+)$ $1.php [NC,L]
+</IfModule>
