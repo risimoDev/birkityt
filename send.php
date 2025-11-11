@@ -12,7 +12,7 @@ if (!error_get_last()) {
     $email = $_POST['email'];
     $text = $_POST['text'];
     $file = $_FILES['myfile'];
-    $phone = $_POST['phone']
+    $phone = $_POST['phone'];
     
     
     // Формирование самого письма
