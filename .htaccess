@@ -1,0 +1,11 @@
+RewriteEngine On
+
+# Если запрашивается путь без расширения, пробуем добавить .php
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^([^\.]+)$ $1.php [NC,L]
+
+<Directory /var/www/birkityt.ru>
+    AllowOverride All  # ← должно быть All, а не None
+    Require all granted
+</Directory>
