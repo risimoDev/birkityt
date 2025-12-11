@@ -1,3 +1,29 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+    html {
+        scroll-behavior: smooth;
+    }
+
+    body {
+        @apply bg-mainColor font-sans text-textColor;
+    }
+
+    h1,
+    h2,
+    h3 {
+        @apply text-textColorDark tracking-tight;
+    }
+}
+
+@layer components {
+    .btn-primary {
+        @apply rounded-xl bg-onbutton px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-buttonhover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-onbutton;
+    }
+
+    .card {
+        @apply transition ease-in-out delay-150 rounded-xl shadow-sm hover:shadow-xl bg-white/70 backdrop-blur-sm;
+    }
+}

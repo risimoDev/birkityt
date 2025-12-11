@@ -1,11 +1,10 @@
 <?php
+include __DIR__ . '/includes/db.php';
 // Обработчик калькулятора — принимает JSON и отправляет письмо менеджеру
 require 'phpmailer/PHPMailer.php';
 require 'phpmailer/SMTP.php';
-require 'phpmailer/Exception.php';
-
-$raw = file_get_contents('php://input');
-$data_in = json_decode($raw, true);
+// Обработчик калькулятора — принимает JSON и сохраняет в БД
+include __DIR__ . '/includes/db.php';
 
 if (!$data_in) {
     header('Content-Type: application/json');
@@ -54,25 +53,20 @@ if (!$smtp_host || !$smtp_user || !$smtp_pass || !$to_address) {
 $mail = new PHPMailer\PHPMailer\PHPMailer();
 $mail->isSMTP();
 $mail->CharSet = 'UTF-8';
-$mail->SMTPAuth = true;
-$mail->Host = $smtp_host;
-$mail->Username = $smtp_user;
-$mail->Password = $smtp_pass;
-if ($smtp_secure)
-    $mail->SMTPSecure = $smtp_secure;
-if ($smtp_port)
-    $mail->Port = (int) $smtp_port;
-if ($from_address)
-    $mail->setFrom($from_address, $from_name);
-$mail->addAddress($to_address);
-$mail->isHTML(true);
-$mail->Subject = 'Заказ с калькулятора — birkityt.ru';
-$mail->Body = $body;
-
-if ($mail->send()) {
+    try {
+// Сохраняем в БД
+try {
+    $stmt = $pdo->prepare('INSERT INTO submissions (type,name,phone,email,payload) VALUES (?,?,?,?,?)');
+    $stmt->execute([
+        'calculator',
+        $name,
+        $phone,
+        $email,
+        json_encode($data_in, JSON_UNESCAPED_UNICODE)
+    ]);
     header('Content-Type: application/json');
-    echo json_encode(['result' => 'success', 'info' => 'Заказ отправлен менеджеру']);
-} else {
+    echo json_encode(['result' => 'success', 'info' => 'Заявка сохранена']);
+} catch (Throwable $e) {
     header('Content-Type: application/json');
-    echo json_encode(['result' => 'error', 'info' => 'Ошибка при отправке письма', 'desc' => $mail->ErrorInfo]);
+    echo json_encode(['result' => 'error', 'info' => 'Ошибка сохранения', 'desc' => $e->getMessage()]);
 }

@@ -11,6 +11,15 @@ return [
     'from_address' => 'no-reply@example.com',
     'from_name' => 'Birkityt',
     'to_address' => 'orders@example.com'
+    ,
+    // Мини-панель администрирования
+    'admin_password' => '123123123'
+    ,
+    // MySQL database settings
+    'db_host' => '127.0.0.1',
+    'db_user' => 'root',
+    'db_pass' => '',
+    'db_name' => 'birkityt'
 ];
 
 // Альтернативно можно использовать переменные окружения:

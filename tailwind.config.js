@@ -2,8 +2,13 @@
 module.exports = {
   content: ["./**/*.php"],
   theme: {
+    container: {
+      center: true,
+      padding: '1rem',
+      screens: { sm: '640px', md: '768px', lg: '1024px', xl: '1280px' }
+    },
     fontFamily: {
-      mainSans: {}
+      sans: ['Manrope', 'system-ui', 'sans-serif']
     },
     extend: {
       boxShadow: {
@@ -17,7 +22,9 @@ module.exports = {
         ltgreen: "#E4F0D0",
         clrBrown: '#9d7b64',
         clrLoft: '#DEAB96',
-        clrLightBrown: '#c9b0a1'
+        clrLightBrown: '#c9b0a1',
+        textColorDark: '#0f172a',
+        textColor: '#475569'
       }
     },
   },

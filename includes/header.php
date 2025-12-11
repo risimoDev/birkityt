@@ -4,72 +4,111 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Изготовление бирок для одежды на различных тканях и силиконе. Картонные бирки для одежды. Высокое качество и индивидуальный подход. Закажите бирки на birkityt.ru.">
-    <meta name="keywords" content="бирки для одежды, тканевые бирки, силиконовые бирки, картонные бирки, изготовление бирок, бирки на заказ, birkityt.ru">
+    <meta name="description"
+        content="Изготовление бирок для одежды на различных тканях и силиконе. Картонные бирки для одежды. Высокое качество и индивидуальный подход. Закажите бирки на birkityt.ru.">
+    <meta name="keywords"
+        content="бирки для одежды, тканевые бирки, силиконовые бирки, картонные бирки, изготовление бирок, бирки на заказ, birkityt.ru">
     <meta name="author" content="Birkityt">
     <meta name="robots" content="index, follow">
-    <title>БИРКИТУТ - Изготовление бирок для одежды на заказ</title>
-    <link rel="canonical" href="https://birkityt.ru">
-    <meta property="og:title" content="Birkityt - Изготовление бирок для одежды на заказ">
-    <meta property="og:description" content="Изготовление бирок для одежды на различных тканях и силиконе. Картонные бирки для одежды. Высокое качество и индивидуальный подход. Закажите бирки на birkityt.ru.">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://birkityt.ru">
-    <meta property="og:image" content="https://birkityt.ru/path/to/your/image.jpg">
+    <?php
+    $seo = [];
+    $seoPath = __DIR__ . '/../content/seo.json';
+    if (file_exists($seoPath)) {
+        $data = json_decode(file_get_contents($seoPath), true);
+        if (is_array($data))
+            $seo = $data;
+    }
+    $seo_title = $seo['title'] ?? 'БИРКИТУТ - Изготовление бирок для одежды на заказ';
+    $seo_description = $seo['description'] ?? 'Изготовление бирок для одежды на различных тканях и силиконе. Картонные бирки для одежды. Высокое качество и индивидуальный подход. Закажите бирки на birkityt.ru.';
+    $seo_keywords = $seo['keywords'] ?? 'бирки для одежды, тканевые бирки, силиконовые бирки, картонные бирки, изготовление бирок, бирки на заказ, birkityt.ru';
+    $seo_canonical = $seo['canonical'] ?? 'https://birkityt.ru';
+    $seo_og_image = $seo['og_image'] ?? 'https://birkityt.ru/public/images/banners/0iCWg4QBUkE.jpg';
+    $seo_theme = $seo['theme_color'] ?? '#A1B5D8';
+    $seo_favicon = $seo['favicon'] ?? '/public/images/logo.svg';
+    echo "<title>{$seo_title}</title>\n";
+    echo "<link rel=\"canonical\" href=\"{$seo_canonical}\">\n";
+    echo "<meta name=\"description\" content=\"" . htmlspecialchars($seo_description, ENT_QUOTES) . "\">\n";
+    echo "<meta name=\"keywords\" content=\"" . htmlspecialchars($seo_keywords, ENT_QUOTES) . "\">\n";
+    echo "<meta property=\"og:title\" content=\"" . htmlspecialchars($seo_title, ENT_QUOTES) . "\">\n";
+    echo "<meta property=\"og:description\" content=\"" . htmlspecialchars($seo_description, ENT_QUOTES) . "\">\n";
+    echo "<meta property=\"og:type\" content=\"website\">\n";
+    echo "<meta property=\"og:url\" content=\"{$seo_canonical}\">\n";
+    echo "<meta property=\"og:image\" content=\"{$seo_og_image}\">\n";
+    echo "<meta name=\"theme-color\" content=\"{$seo_theme}\">\n";
+    echo "<link rel=\"icon\" type=\"image/svg+xml\" href=\"{$seo_favicon}\">\n";
+    ?>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="public/css/style.css">
-        <link rel="stylesheet" href="public/css/works.css">
+    <link rel="stylesheet" href="public/css/works.css">
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.1/dist/cdn.min.js"></script>
     <script src="public/js/main.js"></script>
-        <script src="public/js/works.js"></script>
+    <script src="public/js/works.js"></script>
     <script defer src="public/js/forms.js"></script>
     <?php if (!empty($page_head))
         echo $page_head; ?>
-    <script type="text/javascript" >
-   (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-   m[i].l=1*new Date();
-   for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
-   k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
-   (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+    <script type="text/javascript">
+        (function (m, e, t, r, i, k, a) {
+            m[i] = m[i] || function () { (m[i].a = m[i].a || []).push(arguments) };
+            m[i].l = 1 * new Date();
+            for (var j = 0; j < document.scripts.length; j++) { if (document.scripts[j].src === r) { return; } }
+            k = e.createElement(t), a = e.getElementsByTagName(t)[0], k.async = 1, k.src = r, a.parentNode.insertBefore(k, a)
+        })
+            (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
 
-   ym(99360339, "init", {
-        clickmap:true,
-        trackLinks:true,
-        accurateTrackBounce:true,
-        trackHash:true
-   });
-</script>
-<noscript><div><img src="https://mc.yandex.ru/watch/99360339" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
-<!-- /Yandex.Metrika counter -->
-<script>
-async function submitForm(event) {
-  event.preventDefault(); // отключаем перезагрузку/перенаправление страницы
-  try {
-  	// Формируем запрос
-    const response = await fetch(event.target.action, {
-    	method: 'POST',
-    	body: new FormData(event.target)
-    });
-    // проверяем, что ответ есть
-    if (!response.ok) throw (`Ошибка при обращении к серверу: ${response.status}`);
-    // проверяем, что ответ действительно JSON
-    const contentType = response.headers.get('content-type');
-    if (!contentType || !contentType.includes('application/json')) {
-      throw ('Ошибка обработки. Ответ не JSON');
-    }
-    // обрабатываем запрос
-    const json = await response.json();
-    if (json.result === "success") {
-    	// в случае успеха
-    	alert(json.info);
-    } else { 
-    	// в случае ошибки
-    	console.log(json);
-    	throw (json.info);
-    }
-  } catch (error) { // обработка ошибки
-    alert(error);
-  }
-}
-</script>
+        ym(99360339, "init", {
+            clickmap: true,
+            trackLinks: true,
+            accurateTrackBounce: true,
+            trackHash: true
+        });
+    </script>
+    <noscript>
+        <div><img src="https://mc.yandex.ru/watch/99360339" style="position:absolute; left:-9999px;" alt="" /></div>
+    </noscript>
+    <!-- /Yandex.Metrika counter -->
+    <script>
+        async function submitForm(event) {
+            event.preventDefault(); // отключаем перезагрузку/перенаправление страницы
+            try {
+                // Формируем запрос
+                const response = await fetch(event.target.action, {
+                    method: 'POST',
+                    body: new FormData(event.target)
+                });
+                // если был редирект — переходим на адрес
+                if (response.redirected) {
+                    window.location.href = response.url || '/success.php';
+                    return;
+                }
+                // проверяем, что ответ есть
+                if (!response.ok) throw (`Ошибка при обращении к серверу: ${response.status}`);
+                // проверяем, что ответ действительно JSON
+                const contentType = response.headers.get('content-type') || '';
+                // Если сервер вернул HTML (редирект на success.php), переходим на success
+                if (contentType.includes('text/html')) {
+                    window.location.href = '/success.php';
+                    return;
+                }
+                // Иначе ожидаем JSON, как для AJAX-обработчиков
+                if (contentType.includes('application/json')) {
+                    const json = await response.json();
+                    if (json.result === "success") {
+                        window.location.href = '/success.php';
+                    } else {
+                        console.log(json);
+                        throw (json.info || 'Ошибка отправки');
+                    }
+                } else {
+                    // неизвестный формат — безопасный переход на success
+                    window.location.href = '/success.php';
+                }
+            } catch (error) { // обработка ошибки
+                alert(error);
+            }
+        }
+    </script>
 </head>
 
 <body class="bg-mainColor">
@@ -123,8 +162,7 @@ async function submitForm(event) {
             </li>
             <li><a class="text-sm text-gray-400 hover:text-gray-500" href="/materials.php">Материалы</a></li>
         </ul>
-        <a class="hidden lg:inline-block py-2 px-6 bg-onbutton hover:bg-buttonhover text-sm text-white font-bold rounded-xl transition duration-200"
-            href="https://vk.com/birkityt">Мы в ВК</a>
+        <a class="hidden lg:inline-block btn-primary" href="https://vk.com/birkityt">Мы в ВК</a>
     </nav>
     <div class="navbar-menu relative z-50 hidden">
         <div class="navbar-backdrop fixed inset-0 bg-gray-800 opacity-25"></div>
@@ -171,8 +209,7 @@ async function submitForm(event) {
             </div>
             <div class="mt-auto">
                 <div class="pt-6">
-                    <a class="lg:inline-block py-2 px-6 bg-onbutton hover:bg-buttonhover text-sm text-white font-bold rounded-xl transition duration-200"
-                        href="https://vk.com/birkityt">Мы в ВК</a>
+                    <a class="lg:inline-block btn-primary" href="https://vk.com/birkityt">Мы в ВК</a>
                 </div>
                 <p class="my-4 text-xs text-center text-gray-400">
                     <span>Copyright ©birkityt.ru 2025</span>

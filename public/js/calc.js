@@ -4,32 +4,12 @@ document.addEventListener("DOMContentLoaded", () => {
   const $inputs = $form.querySelectorAll('input, select');
   const $total = $form.querySelector('input[name="totalCost"]');
 
-  const products = {
-    "Тканные бирки": ["Сатин", "Премиум сатин", "Хлопок", "Имитация хлопка", "Киперная лента", "Нейлон", "Термо-нейлон", "Упаковочная лента"],
-    "Силиконовые бирки": ["Силикон прозрачный", "Силикон белый", "Силикон Черный"],
-    "Навесные бирки": ["Бирки двусторонние", "Бирки односторонние", "Бирки перламутровые"],
-    "Наклейки": ["Матовые наклейки", "Глянцевые наклейки", "Виниловые наклейки"]
-  };
-
-  const prices = {
-    "Сатин": { "15мм": 10, "20мм": 12, "30мм": 14, "40мм": 16 },
-    "Премиум сатин": { "15мм": 10, "20мм": 12, "30мм": 14, "40мм": 15 },
-    "Хлопок": { "15мм": 22, "20мм": 22, "30мм": 22, "40мм": 22 },
-    "Имитация хлопка": { "15мм": 13, "20мм": 18, "30мм": 23, "40мм": 28 },
-    "Киперная лента": { "15мм": 22, "20мм": 22, "30мм": 22, "40мм": 22 },
-    "Нейлон": { "15мм": 6, "20мм": 6, "30мм": 6, "40мм": 6 },
-    "Термо-нейлон": { "15мм": 15, "20мм": 15, "30мм": 15, "40мм": 15 },
-    "Упаковочная лента": { "15мм": 40, "20мм": 40, "30мм": 40, "40мм": 40 },
-    "Силикон прозрачный": { "15мм": 13, "20мм": 15, "30мм": 17, "40мм": 19 },
-    "Силикон белый": { "15мм": 13, "20мм": 15, "30мм": 17, "40мм": 19},
-    "Силикон Черный": { "15мм": 13, "20мм": 15, "30мм": 17, "40мм": 19 },
-    "Бирки двусторонние": { "15мм": 15, "20мм": 15, "30мм": 15, "40мм": 15 },
-    "Бирки односторонние": { "15мм": 13, "20мм": 13, "30мм": 13, "40мм": 13 },
-    "Бирки перламутровые": { "15мм": 17, "20мм": 17, "30мм": 17, "40мм": 17 },
-    "Матовые наклейки": { "15мм": 7, "20мм": 8, "30мм": 9, "40мм": 10 },
-    "Глянцевые наклейки": { "15мм": 7, "20мм": 8, "30мм": 9, "40мм": 10 },
-    "Виниловые наклейки": { "15мм": 10, "20мм": 10, "30мм": 10, "40мм": 10 }
-  };
+  // Данные прайса подгружаем из JSON, чтобы совпадало с price.php
+  let priceData = null;
+  fetch('/data/prices.json')
+    .then(r => r.json())
+    .then(json => { priceData = json; })
+    .catch(() => { priceData = {}; });
 
   const lengthPrices = {
     "5см": 1,
@@ -53,14 +33,20 @@ document.addEventListener("DOMContentLoaded", () => {
     const isFraying = frayingCheckbox.checked;
 
     let total = 0;
-    if (selectedProduct && selectedSize && selectedLength) {
-      total += prices[selectedProduct][selectedSize];
-      total += lengthPrices[selectedLength];
-       if (isFraying) {
-        total += (3);
-
+    if (selectedProduct && selectedSize && selectedLength && priceData) {
+      // Определяем цену за штуку по диапазону количества
+      const tiers = priceData[selectedProduct]?.[selectedSize];
+      if (Array.isArray(tiers)) {
+        let unit = 0;
+        for (const [maxQty, price] of tiers) {
+          if (quantity <= maxQty) { unit = price; break; }
+          unit = price; // если больше всех диапазонов — берём последний
+        }
+        total += unit;
+        total += lengthPrices[selectedLength] || 0;
+        if (isFraying) { total += 3; }
+        total *= quantity;
       }
-      total *= quantity;
     }
 
     totalCost.textContent = total;
@@ -80,8 +66,8 @@ document.addEventListener("DOMContentLoaded", () => {
     //sizeOptions.appendChild();
 
     const selectedProduct = productOptions.querySelector('input[name="productOptions"]:checked').value;
-
-    Object.keys(prices[selectedProduct]).forEach(size => {
+    const sizes = priceData[selectedProduct] ? Object.keys(priceData[selectedProduct]) : [];
+    sizes.forEach(size => {
       const radio = document.createElement('input');
       radio.type = 'radio';
       radio.name = 'sizeOptions';
@@ -116,7 +102,14 @@ document.addEventListener("DOMContentLoaded", () => {
       productOptions.innerHTML = '';
       sizeOptions.innerHTML = '';
 
-      products[selectedProduct].forEach(product => {
+      // Список материалов берём из ключей JSON соответствующей группы
+      const groupMap = {
+        "Тканные бирки": ["Премиум сатин", "Имитация хлопка", "Хлопок", "Киперная лента"],
+        "Силиконовые бирки": ["Силикон"],
+        "Навесные бирки": ["Картон белый"]
+      };
+      const list = groupMap[selectedProduct] || Object.keys(priceData || {});
+      list.forEach(product => {
         const radio = document.createElement('input');
         radio.type = 'radio';
         radio.name = 'productOptions';
@@ -135,7 +128,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
 
-  $form .addEventListener('submit', (event) => {
+  $form.addEventListener('submit', (event) => {
     event.preventDefault();
     const formData = new FormData(event.target);
     const data = Object.fromEntries(formData);
@@ -146,14 +139,14 @@ document.addEventListener("DOMContentLoaded", () => {
       },
       body: JSON.stringify(data)
     })
-    .then((res) => {
-      if (res.redirected) {
-        window.location.href = res.url;
-      }
-    })
-    .catch((err) => {
-      console.error(err);
-    });
+      .then((res) => {
+        if (res.redirected) {
+          window.location.href = res.url;
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   });
 
 
