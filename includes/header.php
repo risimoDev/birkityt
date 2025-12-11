@@ -79,7 +79,7 @@
                 });
                 // если был редирект — переходим на адрес
                 if (response.redirected) {
-                    window.location.href = response.url || '/success.php';
+                    window.location.href = response.url || '/success';
                     return;
                 }
                 // проверяем, что ответ есть
@@ -88,21 +88,21 @@
                 const contentType = response.headers.get('content-type') || '';
                 // Если сервер вернул HTML (редирект на success.php), переходим на success
                 if (contentType.includes('text/html')) {
-                    window.location.href = '/success.php';
+                    window.location.href = '/success';
                     return;
                 }
                 // Иначе ожидаем JSON, как для AJAX-обработчиков
                 if (contentType.includes('application/json')) {
                     const json = await response.json();
                     if (json.result === "success") {
-                        window.location.href = '/success.php';
+                        window.location.href = '/success';
                     } else {
                         console.log(json);
                         throw (json.info || 'Ошибка отправки');
                     }
                 } else {
                     // неизвестный формат — безопасный переход на success
-                    window.location.href = '/success.php';
+                    window.location.href = '/success';
                 }
             } catch (error) { // обработка ошибки
                 alert(error);
@@ -113,7 +113,7 @@
 
 <body class="bg-mainColor">
     <nav class="relative px-4 py-4 flex justify-between items-center z-50 ">
-        <a class="text-3xl font-bold leading-none" href="/index.php">
+        <a class="text-3xl font-bold leading-none" href="/">
             <object class="h-16 w-auto" type="image/svg+xml" data="public/images/logo.svg">
                 Ваш браузер не поддерживает данные изображения
             </object>
