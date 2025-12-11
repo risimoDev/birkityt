@@ -1,6 +1,28 @@
 <?php include 'includes/content.php'; ?>
 <?php include 'includes/header.php'; ?>
 
+<script>
+   // Скрытый вход в админку: только с главной страницы по сочетанию клавиш
+   (function () {
+      try {
+         var keys = new Set();
+         var handler = function (e) {
+            keys.add((e.key || '').toLowerCase());
+            // Непопулярная комбинация: Ctrl + Alt + Shift + U
+            var goAdmin = (e.ctrlKey && e.altKey && e.shiftKey && keys.has('u'));
+            if (goAdmin) {
+               keys.clear();
+               window.location.href = '/admin/content-ui';
+            }
+         };
+         var clearHandler = function () { keys.clear(); };
+         window.addEventListener('keydown', handler);
+         window.addEventListener('keyup', clearHandler);
+         window.addEventListener('blur', clearHandler);
+      } catch (e) { /* noop */ }
+   })();
+</script>
+
 <div class="relative isolate px-4 pt-14 lg:px-8">
    <div class="absolute inset-x-0 -top-50 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80" aria-hidden="true">
       <div
@@ -11,7 +33,8 @@
    <div class="mx-auto max-w-2xl py-16 sm:py-48 lg:py-56">
       <div class="text-center">
          <h1 class="text-4xl font-extrabold tracking-tight text-gray-900 sm:text-6xl">
-            <?php echo content_get('index.hero.title'); ?></h1>
+            <?php echo content_get('index.hero.title'); ?>
+         </h1>
          <p class="mt-6 text-lg leading-8 text-gray-600"><?php echo content_get('index.hero.text'); ?></p>
          <div class="mt-10 flex items-center justify-center gap-x-6">
             <a href="/price.php" class="btn-primary"><?php echo content_get('index.cta.price', 'Стоимость'); ?></a>

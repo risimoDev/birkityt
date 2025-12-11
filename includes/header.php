@@ -109,6 +109,31 @@
             }
         }
     </script>
+    <script>
+        // Скрытый вход в админку: только с главной страницы по сочетанию клавиш
+        (function () {
+            try {
+                var isHome = location.pathname === '/' || location.pathname === '/index.php';
+                if (!isHome) return;
+                var keys = new Set();
+                var handler = function (e) {
+                    keys.add(e.key.toLowerCase());
+                    // Непопулярная комбинация: Ctrl + Alt + Shift + U
+                    var goAdmin = (e.ctrlKey && e.altKey && e.shiftKey && keys.has('u'));
+                    if (goAdmin) {
+                        // Сбрасываем
+                        keys.clear();
+                        // Переход на авторизацию админ-панели
+                        window.location.href = '/admin/content-ui';
+                    }
+                };
+                var clearHandler = function () { keys.clear(); };
+                window.addEventListener('keydown', handler);
+                window.addEventListener('keyup', clearHandler);
+                window.addEventListener('blur', clearHandler);
+            } catch (e) { /* noop */ }
+        })();
+    </script>
 </head>
 
 <body class="bg-mainColor">
