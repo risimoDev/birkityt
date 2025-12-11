@@ -5,10 +5,6 @@
       <a href="#" class="text-gray-600 ml-1" rel="noopener noreferrer" target="_blank">Бирки для твоего бренда</a>
     </p>
     <span class="inline-flex sm:ml-auto sm:mt-0 mt-4 justify-center sm:justify-start">
-      <a href="/admin/content-ui.php" class="text-xs text-gray-400 hover:text-gray-600" aria-label="Админка"
-        title="Админка">Контент</a>
-      <a href="/admin/prices-ui.php" class="ml-3 text-xs text-gray-400 hover:text-gray-600" aria-label="Прайс"
-        title="Прайс">Прайс</a>
       <a href="https://t.me/Birkityt" class="ml-3 text-gray-500">
         <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="40" height="40" viewBox="0 0 48 48">
           <path fill="#29b6f6" d="M24 4A20 20 0 1 0 24 44A20 20 0 1 0 24 4Z"></path>
