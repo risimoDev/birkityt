@@ -40,12 +40,12 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="public/css/style.css">
-    <link rel="stylesheet" href="public/css/works.css">
+    <link rel="stylesheet" href="/public/css/style.css">
+    <link rel="stylesheet" href="/public/css/works.css">
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.1/dist/cdn.min.js"></script>
-    <script src="public/js/main.js"></script>
-    <script src="public/js/works.js"></script>
-    <script defer src="public/js/forms.js"></script>
+    <script src="/public/js/main.js"></script>
+    <script src="/public/js/works.js"></script>
+    <script defer src="/public/js/forms.js"></script>
     <?php if (!empty($page_head))
         echo $page_head; ?>
     <script type="text/javascript">
@@ -114,7 +114,7 @@
 <body class="bg-mainColor">
     <nav class="relative px-4 py-4 flex justify-between items-center z-50 ">
         <a class="text-3xl font-bold leading-none" href="/">
-            <object class="h-16 w-auto" type="image/svg+xml" data="public/images/logo.svg">
+            <object class="h-16 w-auto" type="image/svg+xml" data="/public/images/logo.svg">
                 Ваш браузер не поддерживает данные изображения
             </object>
         </a>

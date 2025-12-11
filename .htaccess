@@ -9,23 +9,29 @@
 
 <IfModule mod_rewrite.c>
   RewriteEngine On
+  RewriteBase /
 
-  # Force HTTPS if available
-  RewriteCond %{HTTPS} !=on
-  RewriteCond %{ENV:HTTPS} !=on
-  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=302,L]
+  # Always allow static assets to pass through (no rewrites)
+  RewriteRule ^public/(.*)$ - [L]
+  RewriteRule ^(images|img|css|js)/(.*)$ - [L]
+  RewriteRule ^(.+)\.(jpg|jpeg|png|gif|webp|svg|ico)$ - [L]
 
-  # Redirect *.php to extensionless URL
+  # Map root to index.php
+  RewriteRule ^$ index.php [L]
+
+  # Redirect *.php requests to extensionless URL (only when explicitly requested)
   RewriteCond %{THE_REQUEST} \s/([^\s?]+)\.php[\s?]
-  RewriteRule ^ %1 [R=301,L]
+  RewriteRule ^ /%1 [R=301,L]
 
   # Serve existing files/directories
   RewriteCond %{REQUEST_FILENAME} -f [OR]
   RewriteCond %{REQUEST_FILENAME} -d
   RewriteRule ^ - [L]
 
-  # Map extensionless to PHP files
-  RewriteRule ^(.+)$ $1.php [L,QSA]
+  # Map extensionless paths to PHP files
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteRule ^([^\.]+)$ $1.php [NC,L,QSA]
 </IfModule>
 
 ## Disable directory listing
@@ -39,17 +45,8 @@ Options -Indexes
 <Files ".git*">
   Require all denied
 </Files>
-# /var/www/birkityt/.htaccess
-<IfModule mod_rewrite.c>
-  RewriteEngine On
 
-  # Запретить прямой доступ к .htaccess
-  <Files ".htaccess">
-    Require all denied
-  </Files>
-
-  # Если запрашивается путь без расширения — пробуем добавить .php
-  RewriteCond %{REQUEST_FILENAME} !-d
-  RewriteCond %{REQUEST_FILENAME} !-f
-  RewriteRule ^([^\.]+)$ $1.php [NC,L]
-</IfModule>
+## Protect .htaccess itself
+<Files ".htaccess">
+  Require all denied
+</Files>
