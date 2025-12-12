@@ -10,8 +10,10 @@
       <?php echo content_get('materials.description', 'Каталог доступных материалов для печати и изготовления.'); ?>
     </p>
     <div class="card flex items-start gap-6 lg:w-3/5 mx-auto border-b pb-10 mb-10 border-gray-200 sm:flex-row flex-col">
-      <div class="sm:w-40 sm:h-40 h-24 w-24 sm:mr-4 inline-flex items-center justify-center rounded-lg bg-white shadow flex-shrink-0 overflow-hidden">
-        <img class="w-full h-full object-cover" src="/public/images/works/work_693a32b7259757.31293716.webp" alt="Силиконовая бирка" loading="lazy">
+      <div
+        class="sm:w-40 sm:h-40 h-24 w-24 sm:mr-4 inline-flex items-center justify-center rounded-lg bg-white shadow flex-shrink-0 overflow-hidden">
+        <img class="w-full h-full object-cover" src="/public/images/works/work_693a32b7259757.31293716.webp"
+          alt="Силиконовая бирка" loading="lazy">
       </div>
       <div class="flex-grow sm:text-left text-center mt-2 sm:mt-0">
         <h2 class="text-gray-900 text-lg title-font font-medium mb-2">
@@ -31,13 +33,17 @@
           <?php echo content_get('materials.cotton.text', 'Хлопок представлен в нескольких оттенках, таких как белый и молочный. Плотный рельефный материал подойдет для всех видов тканей. Стойкая печать методом сублимации.'); ?>
         </p>
       </div>
-      <div class="sm:w-40 sm:h-40 h-24 w-24 sm:ml-4 inline-flex items-center justify-center rounded-lg bg-white shadow flex-shrink-0 overflow-hidden">
-        <img class="w-full h-full object-cover" src="/public/images/works/work_693a32b58034e5.65048226.webp" alt="Хлопоковая бирка" loading="lazy">
+      <div
+        class="sm:w-40 sm:h-40 h-24 w-24 sm:ml-4 inline-flex items-center justify-center rounded-lg bg-white shadow flex-shrink-0 overflow-hidden">
+        <img class="w-full h-full object-cover" src="/public/images/works/work_693a32b58034e5.65048226.webp"
+          alt="Хлопоковая бирка" loading="lazy">
       </div>
     </div>
     <div class="card flex items-start gap-6 lg:w-3/5 mx-auto border-b pb-10 mb-10 border-gray-200 sm:flex-row flex-col">
-      <div class="sm:w-40 sm:h-40 h-24 w-24 sm:mr-4 inline-flex items-center justify-center rounded-lg bg-white shadow flex-shrink-0 overflow-hidden">
-        <img class="w-full h-full object-cover" src="/public/images/works/work_693a32bde64712.94114662.webp" alt="Премиум сатин" loading="lazy">
+      <div
+        class="sm:w-40 sm:h-40 h-24 w-24 sm:mr-4 inline-flex items-center justify-center rounded-lg bg-white shadow flex-shrink-0 overflow-hidden">
+        <img class="w-full h-full object-cover" src="/public/images/works/work_693a32bde64712.94114662.webp"
+          alt="Премиум сатин" loading="lazy">
       </div>
       <div class="flex-grow sm:text-left text-center mt-2 sm:mt-0">
         <h2 class="text-gray-900 text-lg title-font font-medium mb-2">
@@ -57,13 +63,17 @@
           <?php echo content_get('materials.kiper.text', 'Белая киперная лента с выраженной текстурой. Лента плотная, но при этом принимает любую форму. Состав — 100% полиэстер.'); ?>
         </p>
       </div>
-      <div class="sm:w-40 sm:h-40 h-24 w-24 sm:ml-4 inline-flex items-center justify-center rounded-lg bg-white shadow flex-shrink-0 overflow-hidden">
-        <img class="w-full h-full object-cover" src="/public/images/works/work_693a32b6aafd39.89489493.webp" alt="Киперная лента" loading="lazy">
+      <div
+        class="sm:w-40 sm:h-40 h-24 w-24 sm:ml-4 inline-flex items-center justify-center rounded-lg bg-white shadow flex-shrink-0 overflow-hidden">
+        <img class="w-full h-full object-cover" src="/public/images/works/work_693a32b6aafd39.89489493.webp"
+          alt="Киперная лента" loading="lazy">
       </div>
     </div>
     <div class="card flex items-start gap-6 lg:w-3/5 mx-auto border-b pb-10 mb-10 border-gray-200 sm:flex-row flex-col">
-      <div class="sm:w-40 sm:h-40 h-24 w-24 sm:mr-4 inline-flex items-center justify-center rounded-lg bg-white shadow flex-shrink-0 overflow-hidden">
-        <img class="w-full h-full object-cover" src="/public/images/works/work_693a32be620d36.03962487.webp" alt="Картонная бирка" loading="lazy">
+      <div
+        class="sm:w-40 sm:h-40 h-24 w-24 sm:mr-4 inline-flex items-center justify-center rounded-lg bg-white shadow flex-shrink-0 overflow-hidden">
+        <img class="w-full h-full object-cover" src="/public/images/works/work_693a32be620d36.03962487.webp"
+          alt="Картонная бирка" loading="lazy">
       </div>
       <div class="flex-grow sm:text-left text-center mt-2 sm:mt-0">
         <h2 class="text-gray-900 text-lg title-font font-medium mb-2">

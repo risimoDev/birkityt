@@ -22,7 +22,8 @@ function validate_prices($decoded)
             return "Материал '$material' должен содержать объект ширин";
         foreach ($sizes as $size => $tiers) {
             // Специальное поле-примечание материала, не таблица цен
-            if ($size === '__note') continue;
+            if ($size === '__note')
+                continue;
             if (!is_array($tiers))
                 return "'$material' → '$size' должен быть массивом диапазонов";
             foreach ($tiers as $i => $pair) {
