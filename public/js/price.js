@@ -10,9 +10,10 @@
         Object.keys(data).forEach(function (material) {
             var sizes = data[material] || {};
             var note = sizes.__note || '';
-            var wrap = document.createElement('div'); wrap.className = 'overflow-x-auto mt-2';
+            var wrap = document.createElement('div'); wrap.className = 'mt-2 flex justify-center';
             var html = '';
-            html += '<table class="min-w-full bg-white border border-gray-300 rounded-2xl">';
+            html += '<div class="w-full max-w-4xl overflow-x-auto">';
+            html += '<table class="w-full bg-white border border-gray-300 rounded-2xl">';
             html += '<thead class="sticky top-0"><tr class="bg-gray-200 text-gray-700">' +
                 '<th class="py-2 px-4 border-b">Материал</th>' +
                 '<th class="py-2 px-4 border-b">Характеристики</th>' +
@@ -23,29 +24,44 @@
             // Подсчёт строк для rowspan
             var totalRows = 0;
             Object.keys(sizes).forEach(function (sizeName) { if (sizeName !== '__note') totalRows += (sizes[sizeName] || []).length; });
-            var materialCellPrinted = false;
-            var noteCellPrinted = false;
-            Object.keys(sizes).forEach(function (sizeName) {
-                if (sizeName === '__note') return;
-                var tiers = sizes[sizeName] || [];
-                tiers.forEach(function (row, idx) {
-                    var max = row[0], price = row[1];
-                    html += '<tr class="hover:bg-gray-50">';
-                    if (!materialCellPrinted) {
-                        html += '<td class="py-2 px-4 align-top" rowspan="' + totalRows + '">' + material + '</td>';
-                        materialCellPrinted = true;
-                    }
-                    html += '<td class="py-2 px-4">' + sizeName + '</td>';
-                    html += '<td class="py-2 px-4">' + max + '</td>';
-                    html += '<td class="py-2 px-4 font-semibold">' + fmtPrice(price) + '</td>';
-                    if (!noteCellPrinted) {
-                        html += '<td class="py-2 px-4 align-top" rowspan="' + totalRows + '">' + (note || '') + '</td>';
-                        noteCellPrinted = true;
-                    }
-                    html += '</tr>';
+            if (totalRows === 0) {
+                // Плейсхолдер-строка, если у материала нет ни одного диапазона
+                html += '<tr class="hover:bg-gray-50">';
+                html += '<td class="py-2 px-4 align-top">' + material + '</td>';
+                html += '<td class="py-2 px-4 text-gray-400">—</td>';
+                html += '<td class="py-2 px-4 text-gray-400">—</td>';
+                html += '<td class="py-2 px-4 text-gray-400">—</td>';
+                html += '<td class="py-2 px-4 align-top">' + (note || '') + '</td>';
+                html += '</tr>';
+            } else {
+                var materialCellPrinted = false;
+                var noteCellPrinted = false;
+                Object.keys(sizes).forEach(function (sizeName) {
+                    if (sizeName === '__note') return;
+                    var tiers = sizes[sizeName] || [];
+                    tiers.forEach(function (row, idx) {
+                        var max = row[0], price = row[1];
+                        html += '<tr class="hover:bg-gray-50">';
+                        if (!materialCellPrinted) {
+                            html += '<td class="py-2 px-4 align-top" rowspan="' + totalRows + '">' + material + '</td>';
+                            materialCellPrinted = true;
+                        }
+                        // Характеристики (sizeName) печатаем один раз с rowspan по количеству диапазонов
+                        if (idx === 0) {
+                            html += '<td class="py-2 px-4 align-top" rowspan="' + tiers.length + '">' + sizeName + '</td>';
+                        }
+                        html += '<td class="py-2 px-4">' + max + '</td>';
+                        html += '<td class="py-2 px-4 font-semibold">' + fmtPrice(price) + '</td>';
+                        if (!noteCellPrinted) {
+                            html += '<td class="py-2 px-4 align-top" rowspan="' + totalRows + '">' + (note || '') + '</td>';
+                            noteCellPrinted = true;
+                        }
+                        html += '</tr>';
+                    });
                 });
-            });
+            }
             html += '</tbody></table>';
+            html += '</div>';
             wrap.innerHTML = html;
             container.appendChild(wrap);
         });

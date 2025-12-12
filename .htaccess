@@ -19,7 +19,9 @@
   # Map root to index.php
   RewriteRule ^$ index.php [L]
 
-  # Redirect *.php requests to extensionless URL (only when explicitly requested)
+  # Redirect *.php to extensionless ONLY for GET/HEAD to avoid breaking POST JSON APIs
+  RewriteCond %{REQUEST_METHOD} GET [OR]
+  RewriteCond %{REQUEST_METHOD} HEAD
   RewriteCond %{THE_REQUEST} \s/([^\s?]+)\.php[\s?]
   RewriteRule ^ /%1 [R=301,L]
 
