@@ -1,0 +1,88 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: birkityt
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-birkityt}
+      POSTGRES_DB: birkityt
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U birkityt"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    # Exposed for host-side prisma/dev access; remove in hardened prod.
+    # Host port 5433 avoids clashing with a local Postgres on 5432.
+    ports:
+      - "5433:5432"
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: postgresql://birkityt:${POSTGRES_PASSWORD:-birkityt}@db:5432/birkityt?schema=public
+      AUTH_SECRET: ${AUTH_SECRET}
+      AUTH_URL: ${AUTH_URL:-http://localhost:3000}
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-admin@birkityt.ru}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-change-me-please}
+      SMTP_HOST: ${SMTP_HOST:-}
+      SMTP_PORT: ${SMTP_PORT:-465}
+      SMTP_SECURE: ${SMTP_SECURE:-true}
+      SMTP_USER: ${SMTP_USER:-}
+      SMTP_PASS: ${SMTP_PASS:-}
+      MAIL_FROM: ${MAIL_FROM:-}
+      MAIL_TO: ${MAIL_TO:-}
+      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN:-}
+      TELEGRAM_CHAT_ID: ${TELEGRAM_CHAT_ID:-}
+      UPLOAD_DIR: /app/uploads
+    volumes:
+      - uploads:/app/uploads
+    expose:
+      - "3000"
+
+  # One-off migrations & seeding. Not started by default.
+  # Usage: docker compose --profile tools run --rm tools <cmd>
+  tools:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: tools
+    profiles: ["tools"]
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: postgresql://birkityt:${POSTGRES_PASSWORD:-birkityt}@db:5432/birkityt?schema=public
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-admin@birkityt.ru}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-change-me-please}
+    volumes:
+      - uploads:/app/uploads
+
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    depends_on:
+      - web
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - uploads:/srv/uploads:ro
+      - caddy_data:/data
+      - caddy_config:/config
+
+volumes:
+  db_data:
+  uploads:
+  caddy_data:
+  caddy_config:

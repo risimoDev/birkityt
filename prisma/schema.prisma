@@ -1,0 +1,127 @@
+// Birkityt data model — see plan stage 0.
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  MANAGER
+}
+
+enum SubmissionType {
+  CONTACT
+  CALC
+}
+
+enum SubmissionStatus {
+  NEW
+  IN_PROGRESS
+  DONE
+  SPAM
+}
+
+enum CategoryKind {
+  WORK
+  MATERIAL
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  name         String?
+  role         Role     @default(MANAGER)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Submission {
+  id        String           @id @default(cuid())
+  type      SubmissionType
+  name      String?
+  phone     String?
+  email     String?
+  message   String?
+  payload   Json?
+  status    SubmissionStatus @default(NEW)
+  note      String?
+  source    String?
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+
+  @@index([status])
+  @@index([type])
+  @@index([createdAt])
+}
+
+model Category {
+  id        String       @id @default(cuid())
+  slug      String       @unique
+  name      String
+  kind      CategoryKind
+  sortOrder Int          @default(0)
+  works     Work[]
+}
+
+model Work {
+  id            String    @id @default(cuid())
+  title         String?
+  description   String?
+  imageWebp     String
+  imageOriginal String?
+  category      Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  categoryId    String?
+  sortOrder     Int       @default(0)
+  createdAt     DateTime  @default(now())
+
+  @@index([categoryId])
+  @@index([createdAt])
+}
+
+// Replaces content.json: flat key -> value text store.
+model Content {
+  key   String @id
+  value String
+}
+
+// Replaces seo.json / contact settings: arbitrary key -> value.
+model Setting {
+  key   String @id
+  value String
+}
+
+// Replaces prices.json (group -> variant -> [maxQty, pricePerUnit] tiers).
+model PriceGroup {
+  id        String      @id @default(cuid())
+  name      String      @unique
+  note      String?
+  sortOrder Int         @default(0)
+  items     PriceItem[]
+}
+
+model PriceItem {
+  id        String      @id @default(cuid())
+  group     PriceGroup  @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  groupId   String
+  variant   String
+  sortOrder Int         @default(0)
+  tiers     PriceTier[]
+
+  @@index([groupId])
+}
+
+model PriceTier {
+  id           String    @id @default(cuid())
+  item         PriceItem @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  itemId       String
+  maxQty       Int
+  pricePerUnit Int
+  sortOrder    Int       @default(0)
+
+  @@index([itemId])
+}

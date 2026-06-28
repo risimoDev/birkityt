@@ -1,0 +1,12 @@
+# Replace :80 with your domain (e.g. birkityt.ru) for automatic HTTPS.
+:80 {
+	encode gzip zstd
+
+	# Serve user-uploaded files directly.
+	handle_path /uploads/* {
+		root * /srv/uploads
+		file_server
+	}
+
+	reverse_proxy web:3000
+}
