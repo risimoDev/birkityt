@@ -1,8 +1,18 @@
-# Replace :80 with your domain (e.g. birkityt.ru) for automatic HTTPS.
-:80 {
+# Automatic HTTPS via Let's Encrypt.
+# Set DOMAIN and ACME_EMAIL in .env (passed through docker-compose).
+# Requirements: DNS A/AAAA record for DOMAIN points to this server, and
+# ports 80 + 443 are open (handled by scripts/server-setup.sh).
+#
+# Local use without a real domain: set DOMAIN=localhost — Caddy then serves
+# HTTPS with its internal self-signed CA.
+{
+	email {$ACME_EMAIL}
+}
+
+{$DOMAIN:localhost} {
 	encode gzip zstd
 
-	# Serve user-uploaded files directly.
+	# Serve user-uploaded files directly from the shared volume.
 	handle_path /uploads/* {
 		root * /srv/uploads
 		file_server

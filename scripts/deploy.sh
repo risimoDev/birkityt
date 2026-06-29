@@ -46,13 +46,17 @@ $DC up -d web caddy
 log "Очистка старых образов"
 docker image prune -f >/dev/null 2>&1 || true
 
-log "Проверка доступности"
+log "Проверка статуса"
 sleep 3
-if curl -fsS -o /dev/null --max-time 10 http://localhost:80/ 2>/dev/null; then
-  echo "   OK: сайт отвечает"
+# shellcheck disable=SC2046
+if [ -n "$($DC ps --status running --services 2>/dev/null | grep -E '^web$')" ]; then
+  echo "   OK: контейнер web запущен"
 else
-  warn "Сайт пока не отвечает на :80 — проверьте логи: $DC logs -f web caddy"
+  warn "Контейнер web не в статусе running — смотрите логи: $DC logs --tail=50 web"
 fi
+DOMAIN_VAL="$(grep -E '^DOMAIN=' .env 2>/dev/null | cut -d= -f2- | tr -d '"' || true)"
+echo "   Адрес: https://${DOMAIN_VAL:-<домен из .env>}"
+echo "   (Let's Encrypt выпустит сертификат при первом обращении; смотрите: $DC logs caddy)"
 
 $DC ps
 log "Деплой завершён."

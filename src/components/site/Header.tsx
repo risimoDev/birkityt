@@ -34,7 +34,7 @@ export function Header({
       {/* utility bar */}
       <div className="hidden bg-textColorDark text-mainColor/80 md:block">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-1.5 text-xs tracking-wide">
-          <span className="font-mono uppercase">label atelier // Пермь · производство бирок</span>
+          <span className="font-mono uppercase">Производство бирок в Перми · с 2018 года</span>
           <div className="flex items-center gap-5">
             <span>{hours}</span>
             <a href={telegram} className="hover:text-white" target="_blank" rel="noopener">
@@ -57,12 +57,7 @@ export function Header({
         )}
       >
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 sm:px-6">
-          <div className="flex items-baseline gap-2">
-            <Logo />
-            <span className="hidden font-mono text-[10px] uppercase text-textColor/60 sm:inline">
-              est. 2018
-            </span>
-          </div>
+          <Logo />
 
           <nav className="hidden items-center gap-1 lg:flex">
             {NAV.map((item) => {

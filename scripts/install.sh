@@ -47,7 +47,16 @@ $DC up -d web caddy
 log "Статус контейнеров"
 $DC ps
 
+DOMAIN_VAL="$(grep -E '^DOMAIN=' .env 2>/dev/null | cut -d= -f2- | tr -d '"' || true)"
 log "Установка завершена."
-echo "   Сайт:    http://<ваш-домен или IP>"
-echo "   Админка: /admin  (логин из ADMIN_EMAIL/ADMIN_PASSWORD в .env)"
+echo "   Сайт:    https://${DOMAIN_VAL:-<домен из .env>}"
+echo "   Админка: https://${DOMAIN_VAL:-<домен>}/admin  (логин из ADMIN_EMAIL/ADMIN_PASSWORD)"
+echo ""
+echo "   HTTPS: Caddy автоматически выпустит сертификат Let's Encrypt при первом"
+echo "   обращении к домену. Проверьте, что:"
+echo "     • DNS-запись A/AAAA домена указывает на этот сервер;"
+echo "     • порты 80 и 443 открыты (server-setup.sh это делает);"
+echo "     • DOMAIN и ACME_EMAIL заполнены в .env."
+echo "   Логи выпуска сертификата:  $DC logs -f caddy"
+echo ""
 echo "   ВАЖНО: смените пароль администратора после первого входа."

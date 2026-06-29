@@ -72,6 +72,9 @@ services:
     restart: unless-stopped
     depends_on:
       - web
+    environment:
+      DOMAIN: ${DOMAIN:-localhost}
+      ACME_EMAIL: ${ACME_EMAIL:-}
     ports:
       - "80:80"
       - "443:443"
