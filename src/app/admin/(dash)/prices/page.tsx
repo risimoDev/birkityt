@@ -29,8 +29,8 @@ export default async function PricesPage() {
       </div>
 
       <div className="mt-5 grid gap-3">
-        {states.map((g) => (
-          <PriceGroupEditor key={g.id} initial={g} />
+        {states.map((g, i) => (
+          <PriceGroupEditor key={g.id} initial={g} index={i} total={states.length} />
         ))}
         {states.length === 0 && (
           <p className="rounded-2xl border border-dashed border-textColorDark/20 p-10 text-center text-textColor">

@@ -48,6 +48,30 @@ export async function deleteGroup(id: string) {
   refresh();
 }
 
+/** Move a group up or down; persists sortOrder so the public price page reflects it. */
+export async function moveGroup(id: string, dir: "up" | "down") {
+  await requireSession();
+  const groups = await prisma.priceGroup.findMany({
+    orderBy: { sortOrder: "asc" },
+    select: { id: true },
+  });
+  const idx = groups.findIndex((g) => g.id === id);
+  if (idx === -1) return;
+  const swapWith = dir === "up" ? idx - 1 : idx + 1;
+  if (swapWith < 0 || swapWith >= groups.length) return;
+
+  const order = groups.map((g) => g.id);
+  [order[idx], order[swapWith]] = [order[swapWith], order[idx]];
+
+  // Normalize sortOrder to the new sequential order.
+  await prisma.$transaction(
+    order.map((gid, i) =>
+      prisma.priceGroup.update({ where: { id: gid }, data: { sortOrder: i } }),
+    ),
+  );
+  refresh();
+}
+
 export async function saveGroup(payload: GroupPayload): Promise<{ ok: boolean; info?: string }> {
   await requireSession();
   const parsed = groupSchema.safeParse(payload);

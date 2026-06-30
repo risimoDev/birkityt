@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { saveGroup, deleteGroup } from "@/app/admin/(dash)/prices/actions";
+import { saveGroup, deleteGroup, moveGroup } from "@/app/admin/(dash)/prices/actions";
 
 type Tier = { maxQty: number | string; pricePerUnit: number | string };
 type Item = { variant: string; tiers: Tier[] };
@@ -12,11 +12,21 @@ export type GroupState = {
   items: Item[];
 };
 
-export function PriceGroupEditor({ initial }: { initial: GroupState }) {
+export function PriceGroupEditor({
+  initial,
+  index,
+  total,
+}: {
+  initial: GroupState;
+  index: number;
+  total: number;
+}) {
   const [g, setG] = useState<GroupState>(initial);
   const [open, setOpen] = useState(false);
   const [pending, start] = useTransition();
   const [msg, setMsg] = useState<string | null>(null);
+  const isFirst = index === 0;
+  const isLast = index === total - 1;
 
   function patch(p: Partial<GroupState>) {
     setG((s) => ({ ...s, ...p }));
@@ -63,6 +73,24 @@ export function PriceGroupEditor({ initial }: { initial: GroupState }) {
   return (
     <div className="rounded-2xl border border-textColorDark/10 bg-white/70">
       <div className="flex flex-wrap items-center gap-3 p-4">
+        <div className="flex flex-col">
+          <button
+            onClick={() => start(() => moveGroup(g.id, "up"))}
+            disabled={pending || isFirst}
+            title="Выше"
+            className="text-textColor/50 hover:text-textColorDark disabled:opacity-25"
+          >
+            ▲
+          </button>
+          <button
+            onClick={() => start(() => moveGroup(g.id, "down"))}
+            disabled={pending || isLast}
+            title="Ниже"
+            className="text-textColor/50 hover:text-textColorDark disabled:opacity-25"
+          >
+            ▼
+          </button>
+        </div>
         <button onClick={() => setOpen((v) => !v)} className="text-textColor/50 hover:text-textColorDark">
           {open ? "▾" : "▸"}
         </button>

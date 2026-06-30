@@ -1,6 +1,7 @@
 import { getWorks } from "@/lib/works";
 import { getWorkCategories } from "@/lib/categories";
 import { WorksManager, type WorkRow } from "@/components/admin/WorksManager";
+import { CategoryManager } from "@/components/admin/CategoryManager";
 
 export const dynamic = "force-dynamic";
 
@@ -21,6 +22,10 @@ export default async function WorksAdminPage() {
         Портфолио на странице «Наши работы». Загруженные изображения сжимаются в WebP.
         Категории помогают фильтровать работы на сайте.
       </p>
+      <div className="mt-6">
+        <CategoryManager categories={categories} />
+      </div>
+
       <div className="mt-6">
         <WorksManager
           works={rows}
