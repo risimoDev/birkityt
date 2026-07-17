@@ -18,6 +18,14 @@ const schema = z.object({
   frayingEnabled: z.boolean(),
   frayingLabel: z.string().trim().max(64),
   frayingSurcharge: z.coerce.number().int().min(0).max(100000),
+  addonsEnabled: z.boolean(),
+  addonsLabel: z.string().trim().max(64),
+  addons: z.array(
+    z.object({
+      label: z.string().trim().max(48),
+      surcharge: z.coerce.number().int().min(0).max(100000),
+    }),
+  ),
   quantityPresets: z.array(z.coerce.number().int().min(1).max(10_000_000)),
   defaultQuantity: z.coerce.number().int().min(1).max(10_000_000),
 });

@@ -8,10 +8,17 @@ export function TagShape({
   className,
   children,
   tone = "blue",
+  notch = true,
 }: {
   className?: string;
   children?: React.ReactNode;
   tone?: "blue" | "cream" | "ink";
+  /**
+   * When true, the top-left corner is clipped into a tag notch. The clip-path
+   * cuts through the dashed border, so set `notch={false}` where an unbroken
+   * stitched outline is wanted (e.g. the hero eyebrow).
+   */
+  notch?: boolean;
 }) {
   const tones = {
     blue: "bg-onbutton text-white border-white/40",
@@ -23,8 +30,8 @@ export function TagShape({
     <div
       className={cn(
         "relative inline-flex items-center rounded-2xl border border-dashed px-5 py-3",
-        // notched top-left corner via clip-path
-        "[clip-path:polygon(14px_0,100%_0,100%_100%,0_100%,0_14px)]",
+        // notched top-left corner via clip-path (breaks the dashed border)
+        notch && "[clip-path:polygon(14px_0,100%_0,100%_100%,0_100%,0_14px)]",
         tones[tone],
         className,
       )}

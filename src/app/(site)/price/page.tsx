@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 };
 
 function tierLabel(maxQty: number): string {
-  return `до ${maxQty.toLocaleString("ru-RU")} шт`;
+  return `от ${maxQty.toLocaleString("ru-RU")} шт`;
 }
 
 export default async function PricePage() {

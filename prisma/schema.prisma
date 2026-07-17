@@ -101,7 +101,21 @@ model PriceGroup {
   name      String      @unique
   note      String?
   sortOrder Int         @default(0)
+  // When true, the calculator shows the configurable add-ons (rounding,
+  // tag holder, …) for this group — e.g. hanging tags.
+  addonsEnabled Boolean @default(false)
   items     PriceItem[]
+}
+
+// Material cards shown on /materials — editable in admin (add/edit/delete).
+model Material {
+  id        String   @id @default(cuid())
+  title     String
+  text      String
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+
+  @@index([sortOrder])
 }
 
 model PriceItem {

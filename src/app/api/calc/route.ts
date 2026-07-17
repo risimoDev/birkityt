@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
 import { computeQuote } from "@/lib/pricing";
-import { getCalcConfig, lengthSurchargeFor } from "@/lib/calc-config";
+import { getCalcConfig, lengthSurchargeFor, addonsSurchargeFor } from "@/lib/calc-config";
 import { notifyCalc } from "@/lib/notify";
 
 const schema = z.object({
@@ -11,6 +11,7 @@ const schema = z.object({
   quantity: z.coerce.number().int().positive().max(1_000_000),
   length: z.string().max(32).nullable().optional(),
   fraying: z.boolean().optional(),
+  addons: z.array(z.string().max(48)).max(20).optional(),
   name: z.string({ required_error: "Укажите имя" }).trim().min(1, "Укажите имя").max(200),
   phone: z
     .string({ required_error: "Укажите телефон" })
@@ -70,12 +71,20 @@ export async function POST(req: Request) {
   // Recompute surcharges from the editable calculator config — never trust
   // amounts from the client.
   const config = await getCalcConfig();
+  // Only keep add-ons the chosen group actually offers, then recompute.
+  const selectedAddons =
+    item.group.addonsEnabled && config.addonsEnabled
+      ? (data.addons ?? []).filter((label) =>
+          config.addons.some((a) => a.label === label),
+        )
+      : [];
   const quote = computeQuote({
     tiers: item.tiers.map((t) => ({ maxQty: t.maxQty, pricePerUnit: t.pricePerUnit })),
     quantity: data.quantity,
     lengthSurcharge: lengthSurchargeFor(config, data.length ?? null),
     frayingSurcharge:
       data.fraying && config.frayingEnabled ? config.frayingSurcharge : 0,
+    addonsSurcharge: addonsSurchargeFor(config, selectedAddons, item.group.addonsEnabled),
   });
 
   try {
@@ -93,6 +102,7 @@ export async function POST(req: Request) {
           quantity: data.quantity,
           length: data.length ?? null,
           fraying: data.fraying ?? false,
+          addons: selectedAddons,
           contactMethod: data.contactMethod ?? null,
           quote,
         },
@@ -113,6 +123,7 @@ export async function POST(req: Request) {
         quantity: data.quantity,
         length: data.length ?? null,
         fraying: data.fraying ?? false,
+        addons: selectedAddons,
         quote,
       },
     );

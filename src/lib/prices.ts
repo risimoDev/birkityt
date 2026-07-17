@@ -6,6 +6,7 @@ export type PriceGroupDTO = {
   id: string;
   name: string;
   note: string | null;
+  addonsEnabled: boolean;
   items: PriceItemDTO[];
 };
 
@@ -24,6 +25,7 @@ export async function getPriceGroups(): Promise<PriceGroupDTO[]> {
       id: g.id,
       name: g.name,
       note: g.note,
+      addonsEnabled: g.addonsEnabled,
       items: g.items.map((i) => ({
         id: i.id,
         variant: i.variant,

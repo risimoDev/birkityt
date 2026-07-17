@@ -25,12 +25,14 @@ export type QuoteInput = {
   quantity: number;
   lengthSurcharge?: number;
   frayingSurcharge?: number;
+  addonsSurcharge?: number;
 };
 
 export type Quote = {
   unitBase: number;
   lengthSurcharge: number;
   frayingSurcharge: number;
+  addonsSurcharge: number;
   unitTotal: number;
   quantity: number;
   total: number;
@@ -41,11 +43,13 @@ export function computeQuote(input: QuoteInput): Quote {
   const unitBase = resolveUnitPrice(input.tiers, quantity);
   const lengthSurcharge = Math.max(0, input.lengthSurcharge ?? 0);
   const frayingSurcharge = Math.max(0, input.frayingSurcharge ?? 0);
-  const unitTotal = unitBase + lengthSurcharge + frayingSurcharge;
+  const addonsSurcharge = Math.max(0, input.addonsSurcharge ?? 0);
+  const unitTotal = unitBase + lengthSurcharge + frayingSurcharge + addonsSurcharge;
   return {
     unitBase,
     lengthSurcharge,
     frayingSurcharge,
+    addonsSurcharge,
     unitTotal,
     quantity,
     total: unitTotal * quantity,

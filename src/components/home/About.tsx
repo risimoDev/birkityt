@@ -1,25 +1,33 @@
 import Image from "next/image";
 import { type ContentMap, pick } from "@/lib/content";
 
-export function About({ content }: { content: ContentMap }) {
+const ABOUT_PHOTOS = [
+  "/images/banners/0iCWg4QBUkE.jpg",
+  "/images/banners/jtouETZBAo0.jpg",
+  "/images/banners/UPqlF9J6IHo.jpg",
+];
+
+export function About({ content, photos }: { content: ContentMap; photos?: string[] }) {
+  const imgs = photos && photos.length === ABOUT_PHOTOS.length ? photos : ABOUT_PHOTOS;
+  // The "5 дней до готового комплекта" plaque was removed per request — only
+  // the first stat card remains.
   const stat1v = pick(content, "index.about.stat1.value", "1000+");
   const stat1l = pick(content, "index.about.stat1.label", "брендов с нами");
-  const stat2v = pick(content, "index.about.stat2.value", "5 дней");
-  const stat2l = pick(content, "index.about.stat2.label", "до готового комплекта");
+  const stats = [[stat1v, stat1l]].filter(([v, l]) => v || l);
   return (
     <section className="relative overflow-hidden bg-onbutton/10">
       <div className="mx-auto grid max-w-6xl items-center gap-12 px-4 py-20 sm:px-6 lg:grid-cols-2">
         {/* collage */}
         <div className="relative grid grid-cols-2 gap-4">
           <Image
-            src="/images/banners/0iCWg4QBUkE.jpg"
+            src={imgs[0]}
             alt="Печать на ткани"
             width={400}
             height={500}
-            className="mt-8 aspect-[4/5] w-full rounded-2xl object-cover"
+            className="aspect-[4/5] w-full rounded-2xl object-cover"
           />
           <Image
-            src="/images/banners/jtouETZBAo0.jpg"
+            src={imgs[1]}
             alt="Готовые изделия с бирками"
             width={400}
             height={500}
@@ -27,7 +35,7 @@ export function About({ content }: { content: ContentMap }) {
           />
           <div className="col-span-2">
             <Image
-              src="/images/banners/UPqlF9J6IHo.jpg"
+              src={imgs[2]}
               alt="Процесс подготовки макета"
               width={800}
               height={300}
@@ -53,10 +61,7 @@ export function About({ content }: { content: ContentMap }) {
           </p>
 
           <div className="mt-8 grid grid-cols-2 gap-4 sm:max-w-md">
-            {[
-              [stat1v, stat1l],
-              [stat2v, stat2l],
-            ].map(([v, l]) => (
+            {stats.map(([v, l]) => (
               <div
                 key={l}
                 className="rounded-2xl border border-dashed border-textColorDark/20 bg-mainColor/60 p-5"

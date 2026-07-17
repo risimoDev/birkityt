@@ -11,10 +11,12 @@ export function Header({
   phone,
   hours,
   telegram,
+  max,
 }: {
   phone: string;
   hours: string;
   telegram: string;
+  max?: string;
 }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
@@ -34,12 +36,17 @@ export function Header({
       {/* utility bar */}
       <div className="hidden bg-textColorDark text-mainColor/80 md:block">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-1.5 text-xs tracking-wide">
-          <span className="font-mono uppercase">Производство бирок в Перми · с 2018 года</span>
+          <span className="font-mono uppercase">Производство бирок в Перми · с 2017 года</span>
           <div className="flex items-center gap-5">
             <span>{hours}</span>
             <a href={telegram} className="hover:text-white" target="_blank" rel="noopener">
               Telegram
             </a>
+            {max && (
+              <a href={max} className="hover:text-white" target="_blank" rel="noopener">
+                MAX
+              </a>
+            )}
             <a href={`tel:${phone.replace(/[^+\d]/g, "")}`} className="font-semibold text-white">
               {phone}
             </a>

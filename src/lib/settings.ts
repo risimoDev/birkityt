@@ -12,6 +12,7 @@ const DEFAULTS: SettingMap = {
   "social.telegram": "https://t.me/Birkityt",
   "social.vk": "https://vk.com/birkityt",
   "social.whatsapp": "https://api.whatsapp.com/send?phone=79526452271",
+  "social.max": "https://max.ru/u/f9LHodD0cOJvisEjI2Yl4IM8-GKau2r0pL_rSjCK1nIwRpjUDcePeiKUkT0",
   "seo.title": "БИРКИТУТ — изготовление бирок для одежды на заказ",
   "seo.description":
     "Изготовление бирок для одежды на тканях и силиконе. Картонные бирки. Высокое качество и индивидуальный подход.",

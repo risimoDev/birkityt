@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import type { PriceGroupDTO } from "@/lib/prices";
 import { computeQuote, formatRub } from "@/lib/pricing";
-import { type CalcConfig, lengthSurchargeFor } from "@/lib/calc-config";
+import { type CalcConfig, lengthSurchargeFor, addonsSurchargeFor } from "@/lib/calc-config";
 import { cn } from "@/lib/cn";
 
 type Status = "idle" | "sending" | "error";
@@ -27,11 +27,20 @@ export function Calculator({
   const [quantity, setQuantity] = useState(config.defaultQuantity);
   const [length, setLength] = useState<string | null>(null);
   const [fraying, setFraying] = useState(false);
+  const [addons, setAddons] = useState<string[]>([]);
 
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState("");
 
-  const showExtras = config.lengthEnabled || config.frayingEnabled;
+  const addonsAvailable =
+    config.addonsEnabled && !!group?.addonsEnabled && config.addons.length > 0;
+  const showExtras = config.lengthEnabled || config.frayingEnabled || addonsAvailable;
+
+  function toggleAddon(label: string) {
+    setAddons((cur) =>
+      cur.includes(label) ? cur.filter((x) => x !== label) : [...cur, label],
+    );
+  }
 
   const quote = useMemo(
     () =>
@@ -40,14 +49,17 @@ export function Calculator({
         quantity,
         lengthSurcharge: lengthSurchargeFor(config, length),
         frayingSurcharge: fraying && config.frayingEnabled ? config.frayingSurcharge : 0,
+        addonsSurcharge: addonsSurchargeFor(config, addons, !!group?.addonsEnabled),
       }),
-    [item, quantity, length, fraying, config],
+    [item, quantity, length, fraying, addons, group, config],
   );
 
   function onGroupChange(id: string) {
     setGroupId(id);
     const g = groups.find((x) => x.id === id);
     setItemId(g?.items[0]?.id ?? "");
+    // Add-ons are group-specific — clear the selection when the group changes.
+    setAddons([]);
   }
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -62,6 +74,7 @@ export function Calculator({
       quantity,
       length,
       fraying,
+      addons,
       name: fd.get("name"),
       phone: fd.get("phone"),
       email: fd.get("email"),
@@ -155,9 +168,6 @@ export function Calculator({
                 <div>
                   <div className="mb-2 text-sm text-textColor">{config.lengthLabel}</div>
                   <div className="flex flex-wrap gap-2">
-                    <Chip small active={length === null} onClick={() => setLength(null)}>
-                      Не важно
-                    </Chip>
                     {config.lengthOptions.map((l) => (
                       <Chip
                         key={l.label}
@@ -189,6 +199,39 @@ export function Calculator({
                     </span>
                   </span>
                 </label>
+              )}
+              {addonsAvailable && (
+                <div>
+                  <div className="mb-2 text-sm text-textColor">{config.addonsLabel}</div>
+                  <div className="flex flex-wrap gap-2">
+                    {config.addons.map((a) => (
+                      <label
+                        key={a.label}
+                        className={cn(
+                          "flex cursor-pointer items-center gap-3 rounded-xl border px-4 py-2.5 transition-colors",
+                          addons.includes(a.label)
+                            ? "border-onbutton bg-onbutton/10"
+                            : "border-dashed border-textColorDark/20 hover:border-textColorDark/40",
+                        )}
+                      >
+                        <input
+                          type="checkbox"
+                          checked={addons.includes(a.label)}
+                          onChange={() => toggleAddon(a.label)}
+                          className="h-4 w-4 accent-onbutton"
+                        />
+                        <span className="text-sm text-textColorDark">
+                          {a.label}
+                          {a.surcharge > 0 && (
+                            <span className="ml-1 font-mono text-xs text-textColor/60">
+                              +{a.surcharge} ₽/шт
+                            </span>
+                          )}
+                        </span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
               )}
             </div>
           </Step>
@@ -253,6 +296,9 @@ export function Calculator({
             {quote.frayingSurcharge > 0 && (
               <Line label="Обработка" value={`+${formatRub(quote.frayingSurcharge)}`} />
             )}
+            {quote.addonsSurcharge > 0 && (
+              <Line label={config.addonsLabel} value={`+${formatRub(quote.addonsSurcharge)}`} />
+            )}
             <Line label="Итог за штуку" value={formatRub(quote.unitTotal)} strong />
             <Line label="Тираж" value={`${quote.quantity.toLocaleString("ru-RU")} шт`} />
           </div>
@@ -275,7 +321,7 @@ export function Calculator({
             <p className="mt-3 text-center text-sm text-clrLoft">{error}</p>
           )}
           <p className="mt-3 text-center text-[11px] text-mainColor/40">
-            Точную цену подтвердит менеджер после согласования макета.
+            Точную цену подтвердит менеджер.
           </p>
         </div>
       </div>

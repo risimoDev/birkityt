@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { PageHeader } from "@/components/site/PageHeader";
 import { getContent, pick } from "@/lib/content";
+import { getMaterials } from "@/lib/materials";
 
 export const dynamic = "force-dynamic";
 
@@ -11,22 +12,16 @@ export const metadata: Metadata = {
     "Силикон, хлопок, премиум сатин, киперная лента, картон — материалы для печати бирок и этикеток.",
 };
 
-const KEYS = [
-  { key: "silicone", n: "01" },
-  { key: "cotton", n: "02" },
-  { key: "satin", n: "03" },
-  { key: "kiper", n: "04" },
-  { key: "card", n: "05" },
-] as const;
-
 export default async function MaterialsPage() {
-  const content = await getContent();
+  const [content, materials] = await Promise.all([getContent(), getMaterials()]);
 
-  const items = KEYS.map(({ key, n }) => ({
-    n,
-    title: pick(content, `materials.${key}.title`),
-    text: pick(content, `materials.${key}.text`),
-  })).filter((i) => i.title);
+  const items = materials
+    .filter((m) => m.title)
+    .map((m, i) => ({
+      n: String(i + 1).padStart(2, "0"),
+      title: m.title,
+      text: m.text,
+    }));
 
   return (
     <>

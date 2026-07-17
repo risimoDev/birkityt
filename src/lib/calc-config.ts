@@ -8,6 +8,7 @@ import { cache } from "react";
  */
 
 export type LengthOption = { label: string; surcharge: number };
+export type AddonOption = { label: string; surcharge: number };
 
 export type CalcConfig = {
   lengthEnabled: boolean;
@@ -16,6 +17,14 @@ export type CalcConfig = {
   frayingEnabled: boolean;
   frayingLabel: string;
   frayingSurcharge: number;
+  /**
+   * Multi-select add-ons (e.g. corner rounding, tag holder). Shown only for
+   * price groups with `addonsEnabled` — e.g. hanging tags. Several can be
+   * chosen at once; their surcharges sum.
+   */
+  addonsEnabled: boolean;
+  addonsLabel: string;
+  addons: AddonOption[];
   quantityPresets: number[];
   defaultQuantity: number;
 };
@@ -34,6 +43,12 @@ export const DEFAULT_CALC_CONFIG: CalcConfig = {
   frayingEnabled: true,
   frayingLabel: "Обработка от осыпания",
   frayingSurcharge: 3,
+  addonsEnabled: true,
+  addonsLabel: "Дополнения",
+  addons: [
+    { label: "Скругление углов", surcharge: 2 },
+    { label: "Биркодержатель", surcharge: 5 },
+  ],
   quantityPresets: [100, 500, 1000, 3000],
   defaultQuantity: 200,
 };
@@ -56,6 +71,18 @@ export function normalizeCalcConfig(input: unknown): CalcConfig {
         .filter((x) => x.label !== "")
     : d.lengthOptions;
 
+  const addons = Array.isArray(o.addons)
+    ? o.addons
+        .map((x) => {
+          const r = x as Record<string, unknown>;
+          return {
+            label: String(r?.label ?? "").slice(0, 48),
+            surcharge: Math.max(0, Math.floor(Number(r?.surcharge) || 0)),
+          };
+        })
+        .filter((x) => x.label !== "")
+    : d.addons;
+
   const quantityPresets = Array.isArray(o.quantityPresets)
     ? o.quantityPresets
         .map((n) => Math.max(1, Math.floor(Number(n) || 0)))
@@ -70,6 +97,9 @@ export function normalizeCalcConfig(input: unknown): CalcConfig {
     frayingEnabled: typeof o.frayingEnabled === "boolean" ? o.frayingEnabled : d.frayingEnabled,
     frayingLabel: String(o.frayingLabel ?? d.frayingLabel).slice(0, 64) || d.frayingLabel,
     frayingSurcharge: Math.max(0, Math.floor(Number(o.frayingSurcharge) || 0)),
+    addonsEnabled: typeof o.addonsEnabled === "boolean" ? o.addonsEnabled : d.addonsEnabled,
+    addonsLabel: String(o.addonsLabel ?? d.addonsLabel).slice(0, 64) || d.addonsLabel,
+    addons,
     quantityPresets: quantityPresets.length ? quantityPresets : d.quantityPresets,
     defaultQuantity: Math.max(1, Math.floor(Number(o.defaultQuantity) || d.defaultQuantity)),
   };
@@ -89,4 +119,20 @@ export const getCalcConfig = cache(async (): Promise<CalcConfig> => {
 export function lengthSurchargeFor(config: CalcConfig, label: string | null | undefined): number {
   if (!config.lengthEnabled || !label) return 0;
   return config.lengthOptions.find((o) => o.label === label)?.surcharge ?? 0;
+}
+
+/**
+ * Sum the surcharges of the selected add-on labels against a config.
+ * Unknown labels are ignored. When `groupEnabled` is false (the chosen group
+ * doesn't offer add-ons) or the feature is off, returns 0.
+ */
+export function addonsSurchargeFor(
+  config: CalcConfig,
+  labels: string[] | null | undefined,
+  groupEnabled: boolean,
+): number {
+  if (!config.addonsEnabled || !groupEnabled || !labels?.length) return 0;
+  return config.addons
+    .filter((a) => labels.includes(a.label))
+    .reduce((sum, a) => sum + a.surcharge, 0);
 }

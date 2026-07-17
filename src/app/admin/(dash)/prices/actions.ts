@@ -9,6 +9,7 @@ const groupSchema = z.object({
   id: z.string().min(1),
   name: z.string().trim().min(1, "Название группы обязательно").max(200),
   note: z.string().trim().max(500).optional().or(z.literal("")),
+  addonsEnabled: z.boolean().optional(),
   items: z.array(
     z.object({
       variant: z.string().trim().max(200),
@@ -83,7 +84,7 @@ export async function saveGroup(payload: GroupPayload): Promise<{ ok: boolean; i
   await prisma.$transaction(async (tx) => {
     await tx.priceGroup.update({
       where: { id: g.id },
-      data: { name: g.name, note: g.note || null },
+      data: { name: g.name, note: g.note || null, addonsEnabled: g.addonsEnabled ?? false },
     });
     // replace items + tiers wholesale (simplest correct approach)
     await tx.priceItem.deleteMany({ where: { groupId: g.id } });

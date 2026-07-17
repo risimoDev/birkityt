@@ -7,6 +7,7 @@ import { readFileSync, readdirSync, existsSync } from "node:fs";
 import { resolve } from "node:path";
 import { PrismaClient } from "@prisma/client";
 import { CONTENT_DEFAULTS } from "../src/lib/content-schema";
+import { DEFAULT_MATERIALS } from "../src/lib/materials";
 
 const prisma = new PrismaClient();
 
@@ -32,6 +33,7 @@ const SETTINGS: Record<string, string> = {
   "social.telegram": "https://t.me/Birkityt",
   "social.vk": "https://vk.com/birkityt",
   "social.whatsapp": "https://api.whatsapp.com/send?phone=79526452271",
+  "social.max": "https://max.ru/u/f9LHodD0cOJvisEjI2Yl4IM8-GKau2r0pL_rSjCK1nIwRpjUDcePeiKUkT0",
   // SEO defaults
   "seo.title": "БИРКИТУТ — изготовление бирок для одежды на заказ",
   "seo.description":
@@ -127,6 +129,18 @@ async function main() {
     }
   } catch (e) {
     console.warn("⚠️  Could not load legacy prices.json:", (e as Error).message);
+  }
+
+  // --- Material cards (only if table is empty) ---
+  try {
+    const existing = await prisma.material.count();
+    if (existing === 0) {
+      await prisma.material.createMany({
+        data: DEFAULT_MATERIALS.map((m, i) => ({ ...m, sortOrder: i })),
+      });
+    }
+  } catch (e) {
+    console.warn("⚠️  Could not seed materials:", (e as Error).message);
   }
 
   // --- Sample works (only if table is empty) ---

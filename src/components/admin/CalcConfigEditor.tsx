@@ -25,6 +25,10 @@ export function CalcConfigEditor({ initial }: { initial: CalcConfig }) {
           label: o.label,
           surcharge: Number(o.surcharge) || 0,
         })),
+        addons: c.addons.map((o) => ({
+          label: o.label,
+          surcharge: Number(o.surcharge) || 0,
+        })),
         quantityPresets: c.quantityPresets.map((n) => Number(n) || 0).filter((n) => n > 0),
       });
       setMsg(res.ok ? "Сохранено ✓" : res.info ?? "Ошибка");
@@ -136,6 +140,87 @@ export function CalcConfigEditor({ initial }: { initial: CalcConfig }) {
               value={c.frayingSurcharge}
               onChange={(v) => patch({ frayingSurcharge: v })}
             />
+          </div>
+        )}
+      </section>
+
+      {/* Add-ons (multi-select) */}
+      <section className="rounded-2xl border border-textColorDark/10 bg-white/70 p-5">
+        <label className="flex items-center gap-3">
+          <input
+            type="checkbox"
+            checked={c.addonsEnabled}
+            onChange={(e) => patch({ addonsEnabled: e.target.checked })}
+            className="h-4 w-4 accent-onbutton"
+          />
+          <span className="font-bold text-textColorDark">Дополнения (несколько сразу)</span>
+        </label>
+        <p className="mt-1 pl-7 text-sm text-textColor/70">
+          Например «Скругление углов» и «Биркодержатель». Показываются только для
+          групп, у которых в разделе{" "}
+          <a href="/admin/prices" className="font-semibold underline">
+            Цены
+          </a>{" "}
+          включена галочка «Показывать дополнения». Покупатель может выбрать
+          несколько — надбавки складываются.
+        </p>
+
+        {c.addonsEnabled && (
+          <div className="mt-4 space-y-3 pl-7">
+            <Field
+              label="Название блока"
+              value={c.addonsLabel}
+              onChange={(v) => patch({ addonsLabel: v })}
+            />
+            <div>
+              <div className="mb-2 font-mono text-[11px] uppercase tracking-wider text-textColor/60">
+                Варианты и надбавка (₽/шт)
+              </div>
+              <div className="space-y-2">
+                {c.addons.map((o, i) => (
+                  <div key={i} className="grid grid-cols-[1fr_8rem_auto] gap-2">
+                    <input
+                      value={o.label}
+                      onChange={(e) =>
+                        patch({
+                          addons: c.addons.map((x, idx) =>
+                            idx === i ? { ...x, label: e.target.value } : x,
+                          ),
+                        })
+                      }
+                      placeholder="напр. Скругление углов"
+                      className="rounded-lg border border-textColorDark/15 bg-white px-3 py-2 text-sm outline-none focus:border-onbutton"
+                    />
+                    <input
+                      type="number"
+                      value={o.surcharge}
+                      onChange={(e) =>
+                        patch({
+                          addons: c.addons.map((x, idx) =>
+                            idx === i ? { ...x, surcharge: Number(e.target.value) } : x,
+                          ),
+                        })
+                      }
+                      className="rounded-lg border border-textColorDark/15 bg-white px-3 py-2 text-sm outline-none focus:border-onbutton"
+                    />
+                    <button
+                      onClick={() =>
+                        patch({ addons: c.addons.filter((_, idx) => idx !== i) })
+                      }
+                      className="rounded-lg border border-textColorDark/15 px-3 text-xs text-textColor hover:border-red-300 hover:text-red-600"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                ))}
+              </div>
+              <button
+                onClick={() => patch({ addons: [...c.addons, { label: "", surcharge: 0 }] })}
+                className="mt-2 text-xs font-medium text-onbutton hover:underline"
+              >
+                + дополнение
+              </button>
+            </div>
           </div>
         )}
       </section>

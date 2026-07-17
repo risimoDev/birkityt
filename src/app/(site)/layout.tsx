@@ -40,6 +40,7 @@ export default async function SiteLayout({
         phone={setting(s, "site.phone")}
         hours={setting(s, "site.hours")}
         telegram={setting(s, "social.telegram")}
+        max={setting(s, "social.max")}
       />
       <main>{children}</main>
       <Footer />

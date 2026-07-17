@@ -9,6 +9,7 @@ export type GroupState = {
   id: string;
   name: string;
   note: string;
+  addonsEnabled: boolean;
   items: Item[];
 };
 
@@ -59,6 +60,7 @@ export function PriceGroupEditor({
         id: g.id,
         name: g.name,
         note: g.note,
+        addonsEnabled: g.addonsEnabled,
         items: g.items.map((it) => ({
           variant: it.variant,
           tiers: it.tiers
@@ -125,6 +127,19 @@ export function PriceGroupEditor({
             placeholder="Примечание к группе (необязательно)"
             className="w-full rounded-lg border border-textColorDark/10 bg-mainColor px-3 py-2 text-sm outline-none focus:border-onbutton"
           />
+
+          <label className="flex items-center gap-2.5 text-sm text-textColorDark">
+            <input
+              type="checkbox"
+              checked={g.addonsEnabled}
+              onChange={(e) => patch({ addonsEnabled: e.target.checked })}
+              className="h-4 w-4 accent-onbutton"
+            />
+            Показывать дополнения (скругление, биркодержатель) — для навесных бирок
+          </label>
+          <p className="-mt-2 pl-6 text-xs text-textColor/60">
+            Список дополнений и цены настраиваются в разделе «Калькулятор».
+          </p>
 
           {g.items.map((item, ii) => (
             <div key={ii} className="rounded-xl border border-textColorDark/10 bg-mainColor p-3">

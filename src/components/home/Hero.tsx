@@ -9,7 +9,8 @@ const SAMPLES = [
   "/images/works/work_693a32b798b680.91423171.webp",
 ];
 
-export function Hero({ content }: { content: ContentMap }) {
+export function Hero({ content, samples }: { content: ContentMap; samples?: string[] }) {
+  const images = samples && samples.length === SAMPLES.length ? samples : SAMPLES;
   const eyebrow = pick(content, "index.hero.eyebrow", "тканые · силиконовые · картонные");
   const title = pick(content, "index.hero.title", "Бирки, которые<br>делают бренд");
   const text = pick(
@@ -38,7 +39,7 @@ export function Hero({ content }: { content: ContentMap }) {
       <div className="mx-auto grid max-w-6xl items-center gap-12 px-4 pb-20 pt-14 sm:px-6 lg:grid-cols-[1.05fr_0.95fr] lg:pb-28 lg:pt-20">
         {/* left */}
         <div className="relative z-10">
-          <TagShape tone="cream" className="mb-7 text-xs font-semibold uppercase tracking-wide">
+          <TagShape tone="cream" notch={false} className="mb-7 text-xs font-semibold uppercase tracking-wide">
             {eyebrow}
           </TagShape>
 
@@ -80,8 +81,8 @@ export function Hero({ content }: { content: ContentMap }) {
 
         {/* right: physical pile of sample tags */}
         <div className="relative h-[360px] sm:h-[460px] lg:h-[520px]">
-          <div className="bg-grain absolute inset-0 rounded-[2rem] border border-dashed border-textColorDark/15 bg-onbutton/10" />
-          {SAMPLES.map((src, i) => {
+          <div className="bg-grain absolute inset-0 rounded-[2rem] border border-dashed border-textColorDark/15 bg-onbutton/40" />
+          {images.map((src, i) => {
             const rot = [-8, 5, -2][i];
             const pos = [
               "left-6 top-10 sm:left-10",

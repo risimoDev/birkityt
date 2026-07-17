@@ -6,6 +6,7 @@ import { Faq, type FaqItem } from "@/components/home/Faq";
 import { ContactSection } from "@/components/home/ContactSection";
 import { getContent, pick } from "@/lib/content";
 import { getSettings, setting } from "@/lib/settings";
+import { mediaSrcs, HERO_SLOTS, ABOUT_SLOTS } from "@/lib/media";
 import { prisma } from "@/lib/db";
 
 // Content/prices come from the DB and are editable in admin — render per request
@@ -51,10 +52,10 @@ export default async function HomePage() {
 
   return (
     <>
-      <Hero content={content} />
+      <Hero content={content} samples={mediaSrcs(settings, HERO_SLOTS)} />
       <MaterialsMarquee items={marquee} />
       <Advantages content={content} />
-      <About content={content} />
+      <About content={content} photos={mediaSrcs(settings, ABOUT_SLOTS)} />
       <Faq
         items={getFaq(content)}
         eyebrow={pick(content, "faq.eyebrow", "частые вопросы")}

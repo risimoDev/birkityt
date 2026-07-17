@@ -11,6 +11,7 @@ export async function Footer() {
   const tg = setting(s, "social.telegram");
   const vk = setting(s, "social.vk");
   const wa = setting(s, "social.whatsapp");
+  const max = setting(s, "social.max");
 
   return (
     <footer className="mt-24 bg-textColorDark text-mainColor">
@@ -23,10 +24,11 @@ export async function Footer() {
               Производим тканые, силиконовые и картонные бирки для одежды.
               Готовим макеты, печатаем и доставляем по всему миру.
             </p>
-            <div className="mt-6 flex gap-3">
+            <div className="mt-6 flex flex-wrap gap-3">
               <SocialLink href={tg} label="Telegram" />
               <SocialLink href={vk} label="VK" />
               <SocialLink href={wa} label="WhatsApp" />
+              {max && <SocialLink href={max} label="MAX" />}
             </div>
           </div>
 

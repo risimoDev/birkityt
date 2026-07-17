@@ -10,6 +10,7 @@ export default async function PricesPage() {
     id: g.id,
     name: g.name,
     note: g.note ?? "",
+    addonsEnabled: g.addonsEnabled,
     items: g.items.map((i) => ({
       variant: i.variant,
       tiers: i.tiers.map((t) => ({ maxQty: t.maxQty, pricePerUnit: t.pricePerUnit })),

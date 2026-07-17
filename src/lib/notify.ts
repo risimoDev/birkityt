@@ -23,6 +23,7 @@ type CalcDetails = {
   quantity: number;
   length?: string | null;
   fraying: boolean;
+  addons?: string[];
   quote: Quote;
 };
 
@@ -71,6 +72,7 @@ export async function notifyCalc(c: Contact, d: CalcDetails) {
     ["Тираж", `${d.quantity.toLocaleString("ru-RU")} шт`],
     ["Длина", d.length],
     ["Обработка от осыпания", d.fraying ? "да" : null],
+    ["Дополнения", d.addons?.length ? d.addons.join(", ") : null],
     ["Цена за штуку", formatRub(d.quote.unitTotal)],
     ["Ориентировочно", formatRub(d.quote.total)],
     ["—", "—"],

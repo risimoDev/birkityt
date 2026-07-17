@@ -19,6 +19,7 @@ const GROUPS: Group[] = [
       { key: "social.telegram", label: "Telegram (ссылка)" },
       { key: "social.vk", label: "VK (ссылка)" },
       { key: "social.whatsapp", label: "WhatsApp (ссылка)" },
+      { key: "social.max", label: "MAX (ссылка)" },
     ],
   },
   {

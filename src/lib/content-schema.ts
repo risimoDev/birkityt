@@ -62,8 +62,6 @@ export const CONTENT_SCHEMA: ContentGroup[] = [
       { key: "index.about.text", label: "Текст", type: "textarea", default: "В ассортименте более 20 видов продукции. Каждый второй клиент — поставщик на маркетплейсы. Разрабатываем логотипы, готовим макеты и доставляем по всему миру." },
       { key: "index.about.stat1.value", label: "Цифра 1 — значение", default: "1000+" },
       { key: "index.about.stat1.label", label: "Цифра 1 — подпись", default: "брендов с нами" },
-      { key: "index.about.stat2.value", label: "Цифра 2 — значение", default: "5 дней" },
-      { key: "index.about.stat2.label", label: "Цифра 2 — подпись", default: "до готового комплекта" },
     ],
   },
   {
@@ -123,19 +121,10 @@ export const CONTENT_SCHEMA: ContentGroup[] = [
   {
     id: "page-materials",
     title: "Страница «Материалы»",
+    description: "Карточки материалов добавляются в разделе «Материалы».",
     fields: [
       { key: "materials.title", label: "Заголовок", default: "Материалы" },
       { key: "materials.description", label: "Описание", type: "textarea", default: "Выбирайте основу под задачу: от мягкого силикона до плотного картона. Поможем подобрать материал под вашу одежду." },
-      { key: "materials.silicone.title", label: "Силикон — заголовок", default: "Силиконовая бирка" },
-      { key: "materials.silicone.text", label: "Силикон — текст", type: "textarea", default: "Лента матовая, полупрозрачная, приятная на ощупь, эластичная и элегантная." },
-      { key: "materials.cotton.title", label: "Хлопок — заголовок", default: "Хлопковая бирка" },
-      { key: "materials.cotton.text", label: "Хлопок — текст", type: "textarea", default: "Плотный рельефный материал в нескольких оттенках. Стойкая печать методом сублимации." },
-      { key: "materials.satin.title", label: "Сатин — заголовок", default: "Премиум сатин" },
-      { key: "materials.satin.text", label: "Сатин — текст", type: "textarea", default: "Высококачественная сатиновая ленточка с тканым краем. Смотрится презентабельно и дорого." },
-      { key: "materials.kiper.title", label: "Кипер — заголовок", default: "Киперная лента" },
-      { key: "materials.kiper.text", label: "Кипер — текст", type: "textarea", default: "Белая киперная лента с выраженной текстурой. Плотная, принимает любую форму. 100% полиэстер." },
-      { key: "materials.card.title", label: "Картон — заголовок", default: "Картонная бирка" },
-      { key: "materials.card.text", label: "Картон — текст", type: "textarea", default: "В одностороннем и двустороннем варианте, для логотипа, состава и ценников." },
     ],
   },
   {
