@@ -129,7 +129,8 @@ export const CONTENT_SCHEMA: ContentGroup[] = [
   },
   {
     id: "page-delivery",
-    title: "Страница «Доставка»",
+    title: "Главная · Как мы работаем (шаги)",
+    description: "Блок с шагами в разделе «О нас» на главной странице.",
     fields: [
       { key: "delivery.title", label: "Заголовок", default: "Как мы работаем" },
       { key: "delivery.description", label: "Описание", type: "textarea", default: "От заявки до готовой продукции у вас на руках — пять понятных шагов. Доставляем СДЭК и Почтой России." },

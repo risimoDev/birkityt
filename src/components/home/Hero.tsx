@@ -81,7 +81,7 @@ export function Hero({ content, samples }: { content: ContentMap; samples?: stri
 
         {/* right: physical pile of sample tags */}
         <div className="relative h-[360px] sm:h-[460px] lg:h-[520px]">
-          <div className="bg-grain absolute inset-0 rounded-[2rem] border border-dashed border-textColorDark/15 bg-onbutton/40" />
+          <div className="bg-grain absolute inset-0 rounded-[2rem] border border-dashed border-textColorDark/15 bg-onbutton/10" />
           {images.map((src, i) => {
             const rot = [-8, 5, -2][i];
             const pos = [

@@ -6,5 +6,4 @@ export const NAV: NavItem[] = [
   { href: "/calc", label: "Калькулятор" },
   { href: "/works", label: "Наши работы" },
   { href: "/materials", label: "Материалы" },
-  { href: "/delivery", label: "Доставка" },
 ];
