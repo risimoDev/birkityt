@@ -1,6 +1,6 @@
-import Link from "next/link";
 import type { Metadata } from "next";
 import { PageHeader } from "@/components/site/PageHeader";
+import { GoalLink } from "@/components/site/GoalLink";
 import { getPriceGroups } from "@/lib/prices";
 import { getContent, pick } from "@/lib/content";
 
@@ -87,12 +87,13 @@ export default async function PricePage() {
               Калькулятор подберёт цену по тиражу и материалу за пару кликов.
             </p>
           </div>
-          <Link
+          <GoalLink
             href="/calc"
+            goal="calc_open"
             className="shrink-0 rounded-full bg-onbutton px-6 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-white hover:text-textColorDark"
           >
             Открыть калькулятор →
-          </Link>
+          </GoalLink>
         </div>
       </section>
     </>

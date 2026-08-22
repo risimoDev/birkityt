@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { NAV } from "@/lib/nav";
 import { cn } from "@/lib/cn";
 import { Logo } from "@/components/site/Logo";
+import { reachGoal } from "@/lib/metrika";
 
 export function Header({
   phone,
@@ -39,15 +40,31 @@ export function Header({
           <span className="font-mono uppercase">Производство бирок в Перми · с 2017 года</span>
           <div className="flex items-center gap-5">
             <span>{hours}</span>
-            <a href={telegram} className="hover:text-white" target="_blank" rel="noopener">
+            <a
+              href={telegram}
+              className="hover:text-white"
+              target="_blank"
+              rel="noopener"
+              onClick={() => reachGoal("click_telegram")}
+            >
               Telegram
             </a>
             {max && (
-              <a href={max} className="hover:text-white" target="_blank" rel="noopener">
+              <a
+                href={max}
+                className="hover:text-white"
+                target="_blank"
+                rel="noopener"
+                onClick={() => reachGoal("click_max")}
+              >
                 MAX
               </a>
             )}
-            <a href={`tel:${phone.replace(/[^+\d]/g, "")}`} className="font-semibold text-white">
+            <a
+              href={`tel:${phone.replace(/[^+\d]/g, "")}`}
+              className="font-semibold text-white"
+              onClick={() => reachGoal("click_phone")}
+            >
               {phone}
             </a>
           </div>
@@ -90,6 +107,7 @@ export function Header({
           <div className="flex items-center gap-2">
             <Link
               href="/calc"
+              onClick={() => reachGoal("calc_open")}
               className="hidden rounded-full bg-textColorDark px-5 py-2.5 text-sm font-semibold text-mainColor transition-transform hover:-translate-y-0.5 hover:bg-onbutton hover:text-white sm:inline-block"
             >
               Рассчитать заказ
@@ -150,6 +168,7 @@ export function Header({
             ))}
             <Link
               href="/calc"
+              onClick={() => reachGoal("calc_open")}
               className="mt-2 rounded-xl bg-textColorDark px-3 py-3 text-center text-sm font-semibold text-mainColor"
             >
               Рассчитать заказ

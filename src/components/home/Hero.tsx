@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { type ContentMap, pick } from "@/lib/content";
 import { TagShape } from "@/components/site/Stitch";
+import { GoalLink } from "@/components/site/GoalLink";
 
 const SAMPLES = [
   "/images/works/work_693a32b58034e5.65048226.webp",
@@ -51,13 +52,14 @@ export function Hero({ content, samples }: { content: ContentMap; samples?: stri
           <p className="mt-6 max-w-md text-lg leading-relaxed text-textColor">{text}</p>
 
           <div className="mt-9 flex flex-wrap items-center gap-3">
-            <Link
+            <GoalLink
               href="/calc"
+              goal="calc_open"
               className="group inline-flex items-center gap-2 rounded-full bg-textColorDark px-6 py-3.5 text-sm font-semibold text-mainColor transition-transform hover:-translate-y-0.5 hover:bg-onbutton hover:text-white"
             >
               {ctaPrimary}
               <span className="transition-transform group-hover:translate-x-1">→</span>
-            </Link>
+            </GoalLink>
             <Link
               href="/works"
               className="inline-flex items-center gap-2 rounded-full border border-textColorDark/15 px-6 py-3.5 text-sm font-semibold text-textColorDark transition-colors hover:border-textColorDark/40"

@@ -14,6 +14,10 @@ WORKDIR /app
 RUN apk add --no-cache libc6-compat openssl
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
+# NEXT_PUBLIC_* values are inlined into the client bundle by `next build`,
+# so they must be present here — passing them at runtime has no effect.
+ARG NEXT_PUBLIC_YANDEX_METRIKA_ID=""
+ENV NEXT_PUBLIC_YANDEX_METRIKA_ID=$NEXT_PUBLIC_YANDEX_METRIKA_ID
 # Build-time placeholders so env validation passes during `next build`.
 # Real values are injected at runtime via docker-compose.
 ENV DATABASE_URL="postgresql://build:build@localhost:5432/build?schema=public" \

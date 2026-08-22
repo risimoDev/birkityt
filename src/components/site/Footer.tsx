@@ -2,6 +2,9 @@ import Link from "next/link";
 import { NAV } from "@/lib/nav";
 import { getSettings, setting } from "@/lib/settings";
 import { Logo } from "@/components/site/Logo";
+import { GoalAnchor } from "@/components/site/GoalLink";
+import type { Goal } from "@/lib/metrika";
+import { LEGAL } from "@/lib/legal";
 
 export async function Footer() {
   const s = await getSettings();
@@ -25,10 +28,11 @@ export async function Footer() {
               Готовим макеты, печатаем и доставляем по всему миру.
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
-              <SocialLink href={tg} label="Telegram" />
+              <SocialLink href={tg} label="Telegram" goal="click_telegram" />
+              {/* VK has no goal in the agreed list — plain link. */}
               <SocialLink href={vk} label="VK" />
-              <SocialLink href={wa} label="WhatsApp" />
-              {max && <SocialLink href={max} label="MAX" />}
+              <SocialLink href={wa} label="WhatsApp" goal="click_whatsapp" />
+              {max && <SocialLink href={max} label="MAX" goal="click_max" />}
             </div>
           </div>
 
@@ -46,6 +50,13 @@ export async function Footer() {
                 {item.label}
               </Link>
             ))}
+            {/* Not part of NAV — the header must not show it. */}
+            <Link
+              href="/privacy"
+              className="w-fit text-mainColor/80 transition-colors hover:text-onbutton"
+            >
+              Политика конфиденциальности
+            </Link>
           </nav>
 
           {/* contacts */}
@@ -53,34 +64,59 @@ export async function Footer() {
             <div className="font-mono text-xs uppercase tracking-widest text-mainColor/40">
               Контакты
             </div>
-            <a href={`tel:${phone.replace(/[^+\d]/g, "")}`} className="font-semibold hover:text-onbutton">
+            <GoalAnchor
+              href={`tel:${phone.replace(/[^+\d]/g, "")}`}
+              goal="click_phone"
+              className="font-semibold hover:text-onbutton"
+            >
               {phone}
-            </a>
-            <a href={`mailto:${email}`} className="text-mainColor/80 hover:text-onbutton">
+            </GoalAnchor>
+            <GoalAnchor
+              href={`mailto:${email}`}
+              goal="click_email"
+              className="text-mainColor/80 hover:text-onbutton"
+            >
               {email}
-            </a>
+            </GoalAnchor>
             <span className="text-mainColor/80">{address}</span>
           </div>
         </div>
 
-        <div className="mt-12 flex flex-col items-start justify-between gap-2 border-t border-mainColor/15 pt-6 text-xs text-mainColor/50 sm:flex-row sm:items-center">
-          <span>© {new Date().getFullYear()} birkityt.ru — бирки для твоего бренда</span>
-          <span className="font-mono uppercase tracking-wider">сделано с любовью к деталям</span>
+        <div className="mt-12 space-y-4 border-t border-mainColor/15 pt-6 text-xs text-mainColor/50">
+          <p className="leading-relaxed">
+            {LEGAL.entity} · ИНН {LEGAL.inn} · ОГРНИП {LEGAL.ogrn} · {address}
+          </p>
+          <div className="flex flex-col items-start justify-between gap-2 sm:flex-row sm:items-center">
+            <span>© {new Date().getFullYear()} birkityt.ru — бирки для твоего бренда</span>
+            <span className="font-mono uppercase tracking-wider">сделано с любовью к деталям</span>
+          </div>
         </div>
       </div>
     </footer>
   );
 }
 
-function SocialLink({ href, label }: { href: string; label: string }) {
+function SocialLink({
+  href,
+  label,
+  goal,
+}: {
+  href: string;
+  label: string;
+  goal?: Goal;
+}) {
+  const className =
+    "rounded-full border border-mainColor/25 px-4 py-2 text-xs font-medium text-mainColor/80 transition-colors hover:border-onbutton hover:bg-onbutton hover:text-white";
+  if (!goal) {
+    return (
+      <a href={href} target="_blank" rel="noopener" className={className}>
+        {label}
+      </a>
+    );
+  }
   return (
-    <a
-      href={href}
-      target="_blank"
-      rel="noopener"
-      className="rounded-full border border-mainColor/25 px-4 py-2 text-xs font-medium text-mainColor/80 transition-colors hover:border-onbutton hover:bg-onbutton hover:text-white"
-    >
+    <GoalAnchor href={href} goal={goal} external className={className}>
       {label}
-    </a>
+    </GoalAnchor>
   );
 }

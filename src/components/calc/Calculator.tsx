@@ -1,11 +1,13 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import type { PriceGroupDTO } from "@/lib/prices";
 import { computeQuote, formatRub } from "@/lib/pricing";
 import { type CalcConfig, lengthSurchargeFor, addonsSurchargeFor } from "@/lib/calc-config";
 import { cn } from "@/lib/cn";
+import { reachGoal } from "@/lib/metrika";
 
 type Status = "idle" | "sending" | "error";
 
@@ -31,6 +33,7 @@ export function Calculator({
 
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState("");
+  const [consent, setConsent] = useState(false);
 
   const addonsAvailable =
     config.addonsEnabled && !!group?.addonsEnabled && config.addons.length > 0;
@@ -92,6 +95,7 @@ export function Calculator({
       if (!res.ok || json.result !== "success") {
         throw new Error(json.info || "Не удалось отправить заявку");
       }
+      reachGoal("form_submit");
       router.push("/success");
     } catch (err) {
       setStatus("error");
@@ -310,18 +314,42 @@ export function Calculator({
             <div className="mt-1 text-4xl font-extrabold">{formatRub(quote.total)}</div>
           </div>
 
+          <label className="mt-6 flex cursor-pointer items-start gap-3 text-[13px] leading-relaxed text-mainColor/70">
+            <input
+              type="checkbox"
+              name="consent"
+              checked={consent}
+              onChange={(e) => setConsent(e.target.checked)}
+              required
+              className="mt-0.5 h-4 w-4 shrink-0 accent-onbutton"
+            />
+            <span>
+              Я согласен на обработку персональных данных
+              <span className="text-onbutton"> *</span>
+            </span>
+          </label>
+
           <button
             type="submit"
-            disabled={status === "sending"}
-            className="mt-6 w-full rounded-full bg-onbutton px-6 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-white hover:text-textColorDark disabled:opacity-60"
+            disabled={status === "sending" || !consent}
+            className="mt-5 w-full rounded-full bg-onbutton px-6 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-white hover:text-textColorDark disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:bg-onbutton disabled:hover:text-white"
           >
             {status === "sending" ? "Отправляем…" : "Отправить заявку"}
           </button>
           {status === "error" && (
             <p className="mt-3 text-center text-sm text-clrLoft">{error}</p>
           )}
-          <p className="mt-3 text-center text-[11px] text-mainColor/40">
-            Точную цену подтвердит менеджер.
+          <p className="mt-3 text-center text-[11px] leading-relaxed text-mainColor/40">
+            Нажимая кнопку, вы соглашаетесь с{" "}
+            <Link
+              href="/privacy"
+              target="_blank"
+              rel="noopener"
+              className="underline decoration-mainColor/30 underline-offset-2 hover:text-onbutton"
+            >
+              политикой обработки персональных данных
+            </Link>
+            . Точную цену подтвердит менеджер.
           </p>
         </div>
       </div>
