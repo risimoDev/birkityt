@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
+import { YandexMetrika } from "@/components/site/YandexMetrika";
 import { getSettings, setting } from "@/lib/settings";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -44,6 +45,7 @@ export default async function SiteLayout({
       />
       <main>{children}</main>
       <Footer />
+      <YandexMetrika />
     </>
   );
 }
