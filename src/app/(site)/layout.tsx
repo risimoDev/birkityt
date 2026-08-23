@@ -3,25 +3,20 @@ import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
 import { Analytics } from "@/components/site/Analytics";
 import { getSettings, setting } from "@/lib/settings";
+import { SITE_URL } from "@/lib/seo";
 
 export async function generateMetadata(): Promise<Metadata> {
   const s = await getSettings();
-  const title = setting(s, "seo.title");
-  const description = setting(s, "seo.description");
-  const canonical = setting(s, "seo.canonical");
+  const canonical = setting(s, "seo.canonical", SITE_URL);
+  // Only site-wide defaults live here. `alternates` and `openGraph` are
+  // deliberately absent: anything set at this level is inherited by every
+  // page that does not override it, which is exactly how all five pages ended
+  // up pointing their canonical at the homepage. Each page now declares its
+  // own via pageMetadata().
   return {
-    title,
-    description,
-    keywords: setting(s, "seo.keywords"),
-    metadataBase: new URL(canonical || "https://birkityt.ru"),
-    alternates: { canonical: "/" },
-    openGraph: {
-      title,
-      description,
-      url: canonical,
-      type: "website",
-      locale: "ru_RU",
-    },
+    title: setting(s, "seo.title"),
+    description: setting(s, "seo.description"),
+    metadataBase: new URL(canonical),
   };
 }
 

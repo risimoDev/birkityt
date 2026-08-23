@@ -1,16 +1,18 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { PageHeader } from "@/components/site/PageHeader";
 import { getContent, pick } from "@/lib/content";
 import { getMaterials } from "@/lib/materials";
 
 export const dynamic = "force-dynamic";
 
-export const metadata: Metadata = {
-  title: "Материалы для бирок | БИРКИТУТ",
+export const metadata: Metadata = pageMetadata({
+  path: "/materials",
+  title: "Материалы для бирок: силикон, сатин, картон | БИРКИТУТ",
   description:
-    "Силикон, хлопок, премиум сатин, киперная лента, картон — материалы для печати бирок и этикеток.",
-};
+    "Из чего делаем бирки для одежды: силикон, премиум сатин с тканым краем, киперная лента, хлопковая текстура и картон. Поможем подобрать материал под изделие.",
+});
 
 export default async function MaterialsPage() {
   const [content, materials] = await Promise.all([getContent(), getMaterials()]);

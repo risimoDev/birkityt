@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { PageHeader } from "@/components/site/PageHeader";
 import { Gallery } from "@/components/works/Gallery";
 import { getWorks } from "@/lib/works";
@@ -9,11 +10,12 @@ import { cn } from "@/lib/cn";
 
 export const dynamic = "force-dynamic";
 
-export const metadata: Metadata = {
-  title: "Наши работы — примеры бирок | БИРКИТУТ",
+export const metadata: Metadata = pageMetadata({
+  path: "/works",
+  title: "Примеры бирок для брендов одежды — работы | БИРКИТУТ",
   description:
-    "Портфолио выполненных проектов: тканые, силиконовые и картонные бирки для брендов одежды.",
-};
+    "Портфолио выполненных заказов: тканевые, силиконовые и картонные бирки, этикетки, размерники и составники для брендов одежды. Производим их с 2017 года.",
+});
 
 export default async function WorksPage({
   searchParams,

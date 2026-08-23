@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { PageHeader } from "@/components/site/PageHeader";
 import { Calculator } from "@/components/calc/Calculator";
 import { getPriceGroups } from "@/lib/prices";
@@ -7,11 +8,12 @@ import { getContent, pick } from "@/lib/content";
 
 export const dynamic = "force-dynamic";
 
-export const metadata: Metadata = {
-  title: "Калькулятор стоимости бирок | БИРКИТУТ",
+export const metadata: Metadata = pageMetadata({
+  path: "/calc",
+  title: "Калькулятор стоимости бирок для одежды | БИРКИТУТ Пермь",
   description:
-    "Рассчитайте стоимость бирок по материалу, ширине и тиражу онлайн и оставьте заявку.",
-};
+    "Посчитайте цену бирок за минуту: выберите материал, ширину и тираж — увидите стоимость и сразу отправите заявку. Тираж от 30 шт, изготовление за 2–3 дня.",
+});
 
 export default async function CalcPage() {
   const [groups, content, config] = await Promise.all([

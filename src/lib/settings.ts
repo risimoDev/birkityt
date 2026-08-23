@@ -13,11 +13,9 @@ const DEFAULTS: SettingMap = {
   "social.vk": "https://vk.com/birkityt",
   "social.whatsapp": "https://api.whatsapp.com/send?phone=79526452271",
   "social.max": "https://max.ru/u/f9LHodD0cOJvisEjI2Yl4IM8-GKau2r0pL_rSjCK1nIwRpjUDcePeiKUkT0",
-  "seo.title": "БИРКИТУТ — изготовление бирок для одежды на заказ",
+  "seo.title": "Бирки для одежды на заказ в Перми — производство БИРКИТУТ",
   "seo.description":
-    "Изготовление бирок для одежды на тканях и силиконе. Картонные бирки. Высокое качество и индивидуальный подход.",
-  "seo.keywords":
-    "бирки для одежды, тканевые бирки, силиконовые бирки, картонные бирки, изготовление бирок",
+    "Изготовление тканевых, силиконовых и картонных бирок для одежды с 2017 года. Поможем с макетом, тираж от 30 шт, печать за 2–3 дня, доставка по РФ и СНГ.",
   "seo.canonical": "https://birkityt.ru",
   "seo.themeColor": "#A1B5D8",
 };

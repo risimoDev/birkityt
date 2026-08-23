@@ -38,8 +38,6 @@ const SETTINGS: Record<string, string> = {
   "seo.title": "БИРКИТУТ — изготовление бирок для одежды на заказ",
   "seo.description":
     "Изготовление бирок для одежды на различных тканях и силиконе. Картонные бирки для одежды. Высокое качество и индивидуальный подход. Закажите бирки на birkityt.ru.",
-  "seo.keywords":
-    "бирки для одежды, тканевые бирки, силиконовые бирки, картонные бирки, изготовление бирок, бирки на заказ, birkityt.ru",
   "seo.canonical": "https://birkityt.ru",
   "seo.ogImage": "https://birkityt.ru/og.jpg",
   "seo.themeColor": "#A1B5D8",

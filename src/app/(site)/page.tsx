@@ -8,6 +8,17 @@ import { getContent, pick } from "@/lib/content";
 import { getSettings, setting } from "@/lib/settings";
 import { mediaSrcs, HERO_SLOTS, ABOUT_SLOTS } from "@/lib/media";
 import { prisma } from "@/lib/db";
+import { pageMetadata } from "@/lib/seo";
+import type { Metadata } from "next";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const s = await getSettings();
+  return pageMetadata({
+    path: "/",
+    title: setting(s, "seo.title"),
+    description: setting(s, "seo.description"),
+  });
+}
 
 // Content/prices come from the DB and are editable in admin — render per request
 // (also avoids needing a DB during the Docker build step).

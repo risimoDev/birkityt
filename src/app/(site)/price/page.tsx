@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { PageHeader } from "@/components/site/PageHeader";
 import { GoalLink } from "@/components/site/GoalLink";
 import { getPriceGroups } from "@/lib/prices";
@@ -6,11 +7,12 @@ import { getContent, pick } from "@/lib/content";
 
 export const dynamic = "force-dynamic";
 
-export const metadata: Metadata = {
-  title: "Стоимость бирок — прайс-лист | БИРКИТУТ",
+export const metadata: Metadata = pageMetadata({
+  path: "/price",
+  title: "Стоимость бирок для одежды — прайс-лист | БИРКИТУТ",
   description:
-    "Актуальные цены на тканые, силиконовые и картонные бирки по материалам, ширине и тиражам.",
-};
+    "Цены на тканевые, силиконовые и картонные бирки для одежды: стоимость за штуку по материалу, ширине и тиражу. Тираж от 30 шт, скидка от объёма, печать 2–3 дня.",
+});
 
 function tierLabel(maxQty: number): string {
   return `от ${maxQty.toLocaleString("ru-RU")} шт`;

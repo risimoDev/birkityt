@@ -10,10 +10,22 @@ const SAMPLES = [
   "/images/works/work_693a32b798b680.91423171.webp",
 ];
 
+/** Alt text per position in the collage. Positional, like SAMPLES itself. */
+const SAMPLE_ALTS = [
+  "Тканевая бирка из премиум-сатина с тканым краем для бренда одежды",
+  "Силиконовая бирка с объёмным логотипом на трикотажном изделии",
+  "Навесные картонные бирки с логотипом на шнурке",
+];
+
 export function Hero({ content, samples }: { content: ContentMap; samples?: string[] }) {
   const images = samples && samples.length === SAMPLES.length ? samples : SAMPLES;
   const eyebrow = pick(content, "index.hero.eyebrow", "тканые · силиконовые · картонные");
-  const title = pick(content, "index.hero.title", "Бирки, которые<br>делают бренд");
+  const title = pick(
+    content,
+    "index.hero.title",
+    "Бирки для одежды на заказ: тканевые, силиконовые и картонные",
+  );
+  const slogan = pick(content, "index.hero.slogan", "Бирки для Вашего бренда");
   const text = pick(
     content,
     "index.hero.text",
@@ -45,9 +57,17 @@ export function Hero({ content, samples }: { content: ContentMap; samples?: stri
           </TagShape>
 
           <h1
-            className="text-[2.6rem] font-extrabold leading-[1.02] tracking-tight text-textColorDark sm:text-6xl"
+            className="text-[2.1rem] font-extrabold leading-[1.05] tracking-tight text-textColorDark sm:text-5xl"
             dangerouslySetInnerHTML={{ __html: title }}
           />
+
+          {/* Brand slogan — deliberately not a heading, so the H1 above keeps
+              the search query to itself. */}
+          {slogan && (
+            <p className="mt-4 text-xl font-bold tracking-tight text-textColorDark/60 sm:text-2xl">
+              {slogan}
+            </p>
+          )}
 
           <p className="mt-6 max-w-md text-lg leading-relaxed text-textColor">{text}</p>
 
@@ -102,9 +122,10 @@ export function Hero({ content, samples }: { content: ContentMap; samples?: stri
                   <span className="absolute left-3 top-3 z-10 h-3 w-3 rounded-full border-2 border-textColorDark/30 bg-mainColor" />
                   <Image
                     src={src}
-                    alt="Пример бирки"
+                    alt={SAMPLE_ALTS[i]}
                     width={208}
                     height={208}
+                    priority
                     className="aspect-square w-full rounded-xl object-cover"
                   />
                 </div>

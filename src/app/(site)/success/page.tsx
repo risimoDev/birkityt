@@ -3,7 +3,10 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Заявка принята | БИРКИТУТ",
-  robots: { index: false },
+  description: "Спасибо за заявку — менеджер БИРКИТУТ свяжется с вами в рабочее время.",
+  alternates: { canonical: "/success" },
+  // Thank-you page: useful to the visitor, useless in the index.
+  robots: { index: false, follow: true },
 };
 
 export default function SuccessPage() {

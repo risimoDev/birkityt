@@ -5,6 +5,18 @@ import Image from "next/image";
 import type { WorkDTO } from "@/lib/works";
 import { cn } from "@/lib/cn";
 
+/**
+ * Alt text for a portfolio item. Titles and categories are filled in through
+ * the admin, so the best available description wins; the generic fallback only
+ * shows up for items with neither.
+ */
+function altFor(w: WorkDTO): string {
+  if (w.title && w.categoryName) return `${w.title} — ${w.categoryName} на заказ`;
+  if (w.title) return `${w.title} — пример работы БИРКИТУТ`;
+  if (w.categoryName) return `${w.categoryName} для одежды, пример работы БИРКИТУТ`;
+  return "Пример готовой бирки для одежды производства БИРКИТУТ";
+}
+
 export function Gallery({ works }: { works: WorkDTO[] }) {
   const [index, setIndex] = useState<number | null>(null);
   const open = index !== null;
@@ -58,7 +70,7 @@ export function Gallery({ works }: { works: WorkDTO[] }) {
           >
             <Image
               src={w.image}
-              alt={w.title || "Работа"}
+              alt={altFor(w)}
               fill
               sizes="(max-width: 768px) 50vw, 25vw"
               className="object-cover transition-transform duration-500 group-hover:scale-105"
@@ -123,7 +135,7 @@ export function Gallery({ works }: { works: WorkDTO[] }) {
             >
               <Image
                 src={active.image}
-                alt={active.title || "Работа"}
+                alt={altFor(active)}
                 width={1200}
                 height={1200}
                 className="max-h-[80vh] w-auto rounded-2xl object-contain"

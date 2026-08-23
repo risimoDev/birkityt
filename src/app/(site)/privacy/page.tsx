@@ -4,14 +4,16 @@ import type { Metadata } from "next";
 import { PageHeader } from "@/components/site/PageHeader";
 import { getSettings, setting } from "@/lib/settings";
 import { LEGAL } from "@/lib/legal";
+import { pageMetadata } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
+  path: "/privacy",
   title: "Политика обработки персональных данных | БИРКИТУТ",
   description:
-    "Как БИРКИТУТ собирает, хранит и обрабатывает персональные данные посетителей сайта birkityt.ru, и как отозвать согласие.",
-};
+    "Какие данные собирает сайт birkityt.ru, зачем они нужны, сколько хранятся и как отозвать согласие на их обработку.",
+});
 
 /** Date the current wording was published. Bump it when the text changes. */
 const PUBLISHED = "23 августа 2026 г.";

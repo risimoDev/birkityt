@@ -7,6 +7,13 @@ const ABOUT_PHOTOS = [
   "/images/banners/UPqlF9J6IHo.jpg",
 ];
 
+/** Alt text per position in the collage. Positional, like ABOUT_PHOTOS itself. */
+const ABOUT_ALTS = [
+  "Печать логотипа на сатиновой ленте в цехе БИРКИТУТ в Перми",
+  "Готовая толстовка с вшитой тканевой биркой бренда",
+  "Раскладка тканевых и картонных бирок перед отправкой заказчику",
+];
+
 export function About({ content, photos }: { content: ContentMap; photos?: string[] }) {
   const imgs = photos && photos.length === ABOUT_PHOTOS.length ? photos : ABOUT_PHOTOS;
 
@@ -28,14 +35,14 @@ export function About({ content, photos }: { content: ContentMap; photos?: strin
         <div className="relative grid grid-cols-2 gap-4 lg:sticky lg:top-28">
           <Image
             src={imgs[0]}
-            alt="Печать на ткани"
+            alt={ABOUT_ALTS[0]}
             width={400}
             height={500}
             className="aspect-[4/5] w-full rounded-2xl object-cover"
           />
           <Image
             src={imgs[1]}
-            alt="Готовые изделия с бирками"
+            alt={ABOUT_ALTS[1]}
             width={400}
             height={500}
             className="aspect-[4/5] w-full rounded-2xl object-cover"
@@ -43,7 +50,7 @@ export function About({ content, photos }: { content: ContentMap; photos?: strin
           <div className="col-span-2">
             <Image
               src={imgs[2]}
-              alt="Процесс подготовки макета"
+              alt={ABOUT_ALTS[2]}
               width={800}
               height={300}
               className="aspect-[16/7] w-full rounded-2xl object-cover"

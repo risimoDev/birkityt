@@ -27,7 +27,6 @@ const GROUPS: Group[] = [
     fields: [
       { key: "seo.title", label: "Title", multiline: true },
       { key: "seo.description", label: "Description", multiline: true },
-      { key: "seo.keywords", label: "Keywords", multiline: true },
       { key: "seo.canonical", label: "Canonical URL" },
       { key: "seo.themeColor", label: "Theme color" },
     ],

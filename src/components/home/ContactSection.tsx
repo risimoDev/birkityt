@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { reachGoal } from "@/lib/metrika";
+import { LazyMap } from "@/components/site/LazyMap";
 
 type Status = "idle" | "sending" | "ok" | "error";
 
@@ -87,12 +88,9 @@ export function ContactSection({
           </dl>
 
           <div className="mt-8 overflow-hidden rounded-2xl border border-mainColor/15">
-            <iframe
-              title="Карта"
-              className="h-56 w-full"
-              loading="lazy"
+            <LazyMap
+              title={`БИРКИТУТ на карте — ${address}`}
               src="https://yandex.ru/map-widget/v1/?um=constructor%3A5a9e66ca8e53422be682486f68b65a31f288f536be5e5ccf37730aab74481305&source=constructor"
-              style={{ filter: "grayscale(1) contrast(1.1) opacity(0.75)" }}
             />
           </div>
         </div>

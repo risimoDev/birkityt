@@ -28,7 +28,8 @@ export const CONTENT_SCHEMA: ContentGroup[] = [
     description: "Крупный блок наверху главной страницы.",
     fields: [
       { key: "index.hero.eyebrow", label: "Надпись над заголовком", default: "тканые · силиконовые · картонные" },
-      { key: "index.hero.title", label: "Заголовок", type: "html", help: "Можно перенос строки <br>", default: "Бирки, которые<br>делают бренд" },
+      { key: "index.hero.title", label: "Заголовок (H1)", type: "html", help: "Главный заголовок страницы — держите в нём основной поисковый запрос. Можно перенос строки <br>", default: "Бирки для одежды на заказ: тканевые, силиконовые и картонные" },
+      { key: "index.hero.slogan", label: "Слоган под заголовком", help: "Не заголовок, а подпись — на SEO не влияет.", default: "Бирки для Вашего бренда" },
       { key: "index.hero.text", label: "Подзаголовок", type: "textarea", default: "Тканые, силиконовые и картонные этикетки для одежды. Подготовим макет, напечатаем и отправим по всему миру." },
       { key: "index.hero.cta.primary", label: "Кнопка (основная)", default: "Рассчитать стоимость" },
       { key: "index.hero.cta.secondary", label: "Кнопка (вторая)", default: "Смотреть работы" },
