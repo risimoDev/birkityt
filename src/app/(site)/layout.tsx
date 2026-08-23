@@ -4,6 +4,8 @@ import { Footer } from "@/components/site/Footer";
 import { Analytics } from "@/components/site/Analytics";
 import { getSettings, setting } from "@/lib/settings";
 import { SITE_URL } from "@/lib/seo";
+import { JsonLd } from "@/components/site/JsonLd";
+import { organizationJsonLd } from "@/lib/jsonld";
 
 export async function generateMetadata(): Promise<Metadata> {
   const s = await getSettings();
@@ -30,8 +32,11 @@ export default async function SiteLayout({
   children: React.ReactNode;
 }) {
   const s = await getSettings();
+  // Site-wide entity every other block refers to by @id.
+  const organization = await organizationJsonLd();
   return (
     <>
+      <JsonLd data={organization} />
       <Header
         phone={setting(s, "site.phone")}
         hours={setting(s, "site.hours")}

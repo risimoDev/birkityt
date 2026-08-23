@@ -29,6 +29,7 @@ export default async function MaterialsPage() {
     <>
       <PageHeader
         eyebrow="материалы"
+        crumb={{ label: "Материалы", href: "/materials" }}
         title={pick(content, "materials.title", "Материалы")}
         description={pick(
           content,

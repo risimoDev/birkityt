@@ -31,6 +31,7 @@ export default async function WorksPage({
     <>
       <PageHeader
         eyebrow="портфолио"
+        crumb={{ label: "Наши работы", href: "/works" }}
         title={pick(content, "works.title", "Наши работы")}
         description={pick(
           content,

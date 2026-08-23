@@ -1,11 +1,17 @@
+import { Breadcrumbs } from "@/components/site/Breadcrumbs";
+import type { Crumb } from "@/lib/jsonld";
+
 export function PageHeader({
   eyebrow,
   title,
   description,
+  crumb,
 }: {
   eyebrow: string;
   title: string;
   description?: string;
+  /** Current page, as it should appear after "Главная" in the breadcrumbs. */
+  crumb?: Crumb;
 }) {
   return (
     <section className="relative overflow-hidden border-b border-textColorDark/10">
@@ -16,6 +22,13 @@ export function PageHeader({
         ✳
       </span>
       <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6 sm:py-20">
+        {crumb && (
+          <div className="mb-6">
+            <Breadcrumbs
+              items={[{ label: "Главная", href: "/" }, crumb]}
+            />
+          </div>
+        )}
         <span className="font-mono text-xs uppercase tracking-widest text-onbutton">
           / {eyebrow}
         </span>

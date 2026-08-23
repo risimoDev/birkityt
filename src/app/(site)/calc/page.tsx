@@ -26,6 +26,7 @@ export default async function CalcPage() {
     <>
       <PageHeader
         eyebrow="калькулятор"
+        crumb={{ label: "Калькулятор", href: "/calc" }}
         title={pick(content, "calc.title", "Рассчитайте свой заказ")}
         description={pick(
           content,

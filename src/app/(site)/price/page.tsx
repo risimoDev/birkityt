@@ -3,6 +3,8 @@ import { pageMetadata } from "@/lib/seo";
 import { PageHeader } from "@/components/site/PageHeader";
 import { GoalLink } from "@/components/site/GoalLink";
 import { getPriceGroups } from "@/lib/prices";
+import { JsonLd } from "@/components/site/JsonLd";
+import { priceListJsonLd } from "@/lib/jsonld";
 import { getContent, pick } from "@/lib/content";
 
 export const dynamic = "force-dynamic";
@@ -20,11 +22,15 @@ function tierLabel(maxQty: number): string {
 
 export default async function PricePage() {
   const [groups, content] = await Promise.all([getPriceGroups(), getContent()]);
+  // Generated from `groups` — the same rows the table below renders.
+  const priceList = await priceListJsonLd(groups);
 
   return (
     <>
+      {priceList && <JsonLd data={priceList} />}
       <PageHeader
         eyebrow="прайс-лист"
+        crumb={{ label: "Стоимость", href: "/price" }}
         title={pick(content, "price.title", "Стоимость")}
         description={pick(
           content,

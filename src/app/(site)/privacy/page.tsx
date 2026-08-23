@@ -30,6 +30,7 @@ export default async function PrivacyPage() {
       {/* TODO: проверить юристом перед публикацией */}
       <PageHeader
         eyebrow="документы"
+        crumb={{ label: "Политика конфиденциальности", href: "/privacy" }}
         title="Политика обработки персональных данных"
         description={`Редакция от ${PUBLISHED}. Документ описывает, какие данные мы получаем через сайт birkityt.ru, зачем они нужны и как их удалить.`}
       />
