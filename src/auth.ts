@@ -5,7 +5,14 @@ import type { Role } from "@prisma/client";
 import { prisma } from "@/lib/db";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
-  session: { strategy: "jwt" },
+  session: {
+    strategy: "jwt",
+    // 7 days instead of the 30-day default: a stolen laptop or a forgotten
+    // session on someone else's machine stays useful for a week, not a month.
+    maxAge: 7 * 24 * 60 * 60,
+    // Refresh the token at most once a day, so active work is not logged out.
+    updateAge: 24 * 60 * 60,
+  },
   trustHost: true,
   pages: { signIn: "/admin/login" },
   providers: [

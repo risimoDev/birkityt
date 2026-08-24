@@ -18,7 +18,18 @@ $DC version >/dev/null 2>&1 || DC="docker-compose"
 if [ ! -f .env ]; then
   warn ".env не найден — создаю из .env.example"
   cp .env.example .env
-  echo "   Откройте .env и заполните: AUTH_SECRET, ADMIN_PASSWORD, POSTGRES_PASSWORD,"
+  # Generate the secrets nobody should be picking by hand.
+  if command -v openssl >/dev/null 2>&1; then
+    DB_PASS="$(openssl rand -base64 24 | tr -d '/+=' | cut -c1-32)"
+    AUTH_SEC="$(openssl rand -base64 32)"
+    sed -i "s|^POSTGRES_PASSWORD=.*|POSTGRES_PASSWORD=\"$DB_PASS\"|" .env
+    sed -i "s|^DATABASE_URL=.*|DATABASE_URL=\"postgresql://birkityt:$DB_PASS@localhost:5433/birkityt?schema=public\"|" .env
+    sed -i "s|^AUTH_SECRET=.*|AUTH_SECRET=\"$AUTH_SEC\"|" .env
+    echo "   Сгенерированы POSTGRES_PASSWORD и AUTH_SECRET."
+  else
+    echo "   openssl не найден — задайте POSTGRES_PASSWORD и AUTH_SECRET вручную!"
+  fi
+  echo "   Откройте .env и заполните: ADMIN_PASSWORD,"
   echo "   AUTH_URL (домен), SMTP_*, TELEGRAM_*. Затем запустите install.sh снова."
   exit 1
 fi

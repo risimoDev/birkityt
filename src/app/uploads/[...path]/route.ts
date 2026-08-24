@@ -12,7 +12,9 @@ const TYPES: Record<string, string> = {
   ".jpeg": "image/jpeg",
   ".png": "image/png",
   ".gif": "image/gif",
-  ".svg": "image/svg+xml",
+  // No SVG on purpose: it can carry scripts, and it would be served from the
+  // site's own origin. saveWorkImage() re-encodes every upload to WebP, so
+  // nothing here should ever be an SVG anyway.
 };
 
 function nodeStreamToWeb(stream: NodeJS.ReadableStream) {
@@ -46,6 +48,8 @@ export async function GET(
     return new Response(nodeStreamToWeb(stream), {
       headers: {
         "Content-Type": type,
+        // Never let a browser guess a different, executable type.
+        "X-Content-Type-Options": "nosniff",
         "Content-Length": String(info.size),
         "Cache-Control": "public, max-age=31536000, immutable",
       },

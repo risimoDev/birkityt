@@ -12,9 +12,37 @@
 {$DOMAIN:localhost} {
 	encode gzip zstd
 
+	header {
+		# Caddy does not send HSTS on its own. Two years, subdomains included,
+		# and preload-ready. Remove this line if you ever need plain HTTP on a
+		# subdomain — browsers cache it for the full duration.
+		Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
+		# Do not let browsers second-guess declared content types.
+		X-Content-Type-Options "nosniff"
+		# Nobody should be framing this site (clickjacking on the admin forms).
+		X-Frame-Options "SAMEORIGIN"
+		Content-Security-Policy "frame-ancestors 'self'"
+		# Send the origin, not the full path, to third parties.
+		Referrer-Policy "strict-origin-when-cross-origin"
+		# Features the site never uses.
+		Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=(), usb=()"
+		# Hide the server banner.
+		-Server
+	}
+
+	# The admin panel must never end up in a search index or a shared cache.
+	@admin path /admin /admin/*
+	header @admin {
+		X-Robots-Tag "noindex, nofollow, noarchive"
+		Cache-Control "no-store"
+	}
+
 	# Serve user-uploaded files directly from the shared volume.
 	handle_path /uploads/* {
 		root * /srv/uploads
+		header X-Content-Type-Options "nosniff"
+		# Uploads are user-supplied: never let one run as a document.
+		header Content-Security-Policy "default-src 'none'; sandbox"
 		file_server
 	}
 

@@ -4,6 +4,7 @@ import { prisma } from "@/lib/db";
 import { computeQuote } from "@/lib/pricing";
 import { getCalcConfig, lengthSurchargeFor, addonsSurchargeFor } from "@/lib/calc-config";
 import { notifyCalc } from "@/lib/notify";
+import { clientIp, rateLimit } from "@/lib/rate-limit";
 
 const schema = z.object({
   groupId: z.string().min(1),
@@ -24,7 +25,21 @@ const schema = z.object({
   company: z.string().optional(), // honeypot
 });
 
+/** 5 submissions per IP per 10 minutes — well above human use, below a script. */
+const LIMIT = { limit: 5, windowMs: 10 * 60 * 1000 };
+
 export async function POST(req: Request) {
+  const { ok, retryAfter } = rateLimit(
+    `calc:${clientIp(req.headers)}`,
+    LIMIT,
+  );
+  if (!ok) {
+    return NextResponse.json(
+      { result: "error", info: "Слишком много заявок подряд. Попробуйте позже или позвоните нам." },
+      { status: 429, headers: { "Retry-After": String(retryAfter) } },
+    );
+  }
+
   let body: unknown;
   try {
     body = await req.json();

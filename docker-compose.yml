@@ -4,7 +4,7 @@ services:
     restart: unless-stopped
     environment:
       POSTGRES_USER: birkityt
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-birkityt}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD не задан в .env}
       POSTGRES_DB: birkityt
     volumes:
       - db_data:/var/lib/postgresql/data
@@ -13,10 +13,12 @@ services:
       interval: 5s
       timeout: 5s
       retries: 10
-    # Exposed for host-side prisma/dev access; remove in hardened prod.
+    # Bound to the loopback interface ONLY. A bare "5433:5432" publishes the
+    # database to the internet: Docker writes its own iptables rules, which are
+    # evaluated before UFW's, so the firewall does not cover published ports.
     # Host port 5433 avoids clashing with a local Postgres on 5432.
     ports:
-      - "5433:5432"
+      - "127.0.0.1:5433:5432"
 
   web:
     build:
@@ -31,7 +33,7 @@ services:
         condition: service_healthy
     environment:
       NODE_ENV: production
-      DATABASE_URL: postgresql://birkityt:${POSTGRES_PASSWORD:-birkityt}@db:5432/birkityt?schema=public
+      DATABASE_URL: postgresql://birkityt:${POSTGRES_PASSWORD:?POSTGRES_PASSWORD не задан в .env}@db:5432/birkityt?schema=public
       AUTH_SECRET: ${AUTH_SECRET}
       AUTH_URL: ${AUTH_URL:-http://localhost:3000}
       ADMIN_EMAIL: ${ADMIN_EMAIL:-admin@birkityt.ru}
@@ -64,7 +66,7 @@ services:
         condition: service_healthy
     environment:
       NODE_ENV: production
-      DATABASE_URL: postgresql://birkityt:${POSTGRES_PASSWORD:-birkityt}@db:5432/birkityt?schema=public
+      DATABASE_URL: postgresql://birkityt:${POSTGRES_PASSWORD:?POSTGRES_PASSWORD не задан в .env}@db:5432/birkityt?schema=public
       ADMIN_EMAIL: ${ADMIN_EMAIL:-admin@birkityt.ru}
       ADMIN_PASSWORD: ${ADMIN_PASSWORD:-change-me-please}
     volumes:
