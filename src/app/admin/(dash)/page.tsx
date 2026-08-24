@@ -1,5 +1,8 @@
 import Link from "next/link";
 import { prisma } from "@/lib/db";
+import { isTelegramConfigured } from "@/lib/telegram";
+import { isMailConfigured } from "@/lib/mailer";
+import { NotificationStatus } from "@/components/admin/NotificationStatus";
 
 export const dynamic = "force-dynamic";
 
@@ -49,6 +52,11 @@ export default async function AdminHome() {
           </Link>
         ))}
       </div>
+
+      <NotificationStatus
+        telegram={isTelegramConfigured()}
+        email={isMailConfigured()}
+      />
     </div>
   );
 }

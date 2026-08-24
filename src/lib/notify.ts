@@ -35,7 +35,12 @@ function rows(pairs: Array<[string, string | null | undefined]>): {
   const html = visible
     .map(([k, v]) => `<tr><td style="padding:4px 12px 4px 0;color:#475569">${esc(k)}</td><td style="padding:4px 0"><b>${esc(String(v))}</b></td></tr>`)
     .join("");
-  const text = visible.map(([k, v]) => `${k}: ${v}`).join("\n");
+  // `text` goes to Telegram with parse_mode: "HTML", so it needs the same
+  // escaping as the email body. Unescaped, a customer writing "цена < 10"
+  // makes Telegram reject the whole message and the notification is lost.
+  const text = visible
+    .map(([k, v]) => `${esc(k)}: <b>${esc(String(v))}</b>`)
+    .join("\n");
   return { html: `<table>${html}</table>`, text };
 }
 
@@ -47,7 +52,7 @@ async function dispatch(subject: string, html: string, tgText: string) {
   ]);
   return {
     email: results[0].status === "fulfilled" && results[0].value,
-    telegram: results[1].status === "fulfilled" && results[1].value,
+    telegram: results[1].status === "fulfilled" && results[1].value.ok,
   };
 }
 

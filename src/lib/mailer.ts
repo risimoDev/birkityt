@@ -15,6 +15,12 @@ function getTransport(): nodemailer.Transporter | null {
     port: env.SMTP_PORT ?? 465,
     secure: env.SMTP_SECURE ?? true,
     auth: { user: env.SMTP_USER, pass: env.SMTP_PASS },
+    // Notifications are sent while the visitor waits for the form response.
+    // Nodemailer's defaults are minutes long — a wedged SMTP server would
+    // look to the visitor like the site swallowed their order.
+    connectionTimeout: 8000,
+    greetingTimeout: 8000,
+    socketTimeout: 10000,
   });
   return transporter;
 }
