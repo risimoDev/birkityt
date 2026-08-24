@@ -123,7 +123,7 @@ export async function POST(req: Request) {
         },
       },
     });
-    // Notify manager (email + telegram). Non-blocking failures are tolerated.
+    // Notify manager (email + MAX). Non-blocking failures are tolerated.
     await notifyCalc(
       {
         name: data.name,

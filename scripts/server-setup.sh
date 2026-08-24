@@ -42,5 +42,5 @@ ufw status verbose || true
 
 log "Готово. Дальше:"
 echo "   1) Склонируйте репозиторий и cd в него"
-echo "   2) cp .env.example .env  и заполните значения (домен, пароли, SMTP, Telegram)"
+echo "   2) cp .env.example .env  и заполните значения (домен, пароли, SMTP, бот MAX)"
 echo "   3) bash scripts/install.sh"

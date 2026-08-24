@@ -30,7 +30,7 @@ if [ ! -f .env ]; then
     echo "   openssl не найден — задайте POSTGRES_PASSWORD и AUTH_SECRET вручную!"
   fi
   echo "   Откройте .env и заполните: ADMIN_PASSWORD,"
-  echo "   AUTH_URL (домен), SMTP_*, TELEGRAM_*. Затем запустите install.sh снова."
+  echo "   AUTH_URL (домен), SMTP_*, MAX_*. Затем запустите install.sh снова."
   exit 1
 fi
 

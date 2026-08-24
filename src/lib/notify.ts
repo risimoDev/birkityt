@@ -1,5 +1,5 @@
 import { sendMail } from "@/lib/mailer";
-import { sendTelegram } from "@/lib/telegram";
+import { sendMax } from "@/lib/max";
 import { formatRub, type Quote } from "@/lib/pricing";
 
 function esc(s: string): string {
@@ -35,9 +35,9 @@ function rows(pairs: Array<[string, string | null | undefined]>): {
   const html = visible
     .map(([k, v]) => `<tr><td style="padding:4px 12px 4px 0;color:#475569">${esc(k)}</td><td style="padding:4px 0"><b>${esc(String(v))}</b></td></tr>`)
     .join("");
-  // `text` goes to Telegram with parse_mode: "HTML", so it needs the same
-  // escaping as the email body. Unescaped, a customer writing "цена < 10"
-  // makes Telegram reject the whole message and the notification is lost.
+  // `text` is sent to MAX with format "html", so it needs the same escaping
+  // as the email body. Unescaped, a customer writing "цена < 10" makes the
+  // API reject the whole message and the notification is lost.
   const text = visible
     .map(([k, v]) => `${esc(k)}: <b>${esc(String(v))}</b>`)
     .join("\n");
@@ -45,14 +45,14 @@ function rows(pairs: Array<[string, string | null | undefined]>): {
 }
 
 /** Fire both channels in parallel; resolves to which succeeded. Never throws. */
-async function dispatch(subject: string, html: string, tgText: string) {
+async function dispatch(subject: string, html: string, chatText: string) {
   const results = await Promise.allSettled([
     sendMail(subject, html),
-    sendTelegram(tgText),
+    sendMax(chatText),
   ]);
   return {
     email: results[0].status === "fulfilled" && results[0].value,
-    telegram: results[1].status === "fulfilled" && results[1].value.ok,
+    max: results[1].status === "fulfilled" && results[1].value.ok,
   };
 }
 
@@ -66,8 +66,8 @@ export async function notifyContact(c: Contact) {
   ]);
   const subject = `🟦 Заявка с сайта — ${c.name}`;
   const emailHtml = `<h2>Новая заявка (контактная форма)</h2>${html}`;
-  const tg = `🟦 <b>Заявка с сайта</b>\n\n${text}`;
-  return dispatch(subject, emailHtml, tg);
+  const chat = `🟦 <b>Заявка с сайта</b>\n\n${text}`;
+  return dispatch(subject, emailHtml, chat);
 }
 
 export async function notifyCalc(c: Contact, d: CalcDetails) {
@@ -89,6 +89,6 @@ export async function notifyCalc(c: Contact, d: CalcDetails) {
   ]);
   const subject = `🧮 Заявка из калькулятора — ${formatRub(d.quote.total)}`;
   const emailHtml = `<h2>Новая заявка (калькулятор)</h2>${html}`;
-  const tg = `🧮 <b>Заявка из калькулятора</b>\n\n${text}`;
-  return dispatch(subject, emailHtml, tg);
+  const chat = `🧮 <b>Заявка из калькулятора</b>\n\n${text}`;
+  return dispatch(subject, emailHtml, chat);
 }

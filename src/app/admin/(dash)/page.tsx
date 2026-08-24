@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { prisma } from "@/lib/db";
-import { isTelegramConfigured } from "@/lib/telegram";
+import { isMaxConfigured } from "@/lib/max";
 import { isMailConfigured } from "@/lib/mailer";
 import { NotificationStatus } from "@/components/admin/NotificationStatus";
 
@@ -54,7 +54,7 @@ export default async function AdminHome() {
       </div>
 
       <NotificationStatus
-        telegram={isTelegramConfigured()}
+        max={isMaxConfigured()}
         email={isMailConfigured()}
       />
     </div>

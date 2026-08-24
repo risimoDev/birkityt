@@ -1,17 +1,17 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { sendTestTelegram } from "@/app/admin/(dash)/notify-actions";
+import { sendTestMax } from "@/app/admin/(dash)/notify-actions";
 
 /**
  * Shows whether the notification channels are configured and lets an operator
- * send a test message to Telegram without submitting a fake order.
+ * send a test message to MAX without submitting a fake order.
  */
 export function NotificationStatus({
-  telegram,
+  max,
   email,
 }: {
-  telegram: boolean;
+  max: boolean;
   email: boolean;
 }) {
   const [pending, startTransition] = useTransition();
@@ -21,7 +21,7 @@ export function NotificationStatus({
 
   function onTest() {
     setResult(null);
-    startTransition(async () => setResult(await sendTestTelegram()));
+    startTransition(async () => setResult(await sendTestMax()));
   }
 
   return (
@@ -34,15 +34,15 @@ export function NotificationStatus({
       </p>
 
       <div className="mt-4 flex flex-wrap gap-3">
-        <Badge label="Telegram" on={telegram} />
+        <Badge label="MAX" on={max} />
         <Badge label="Почта" on={email} />
       </div>
 
-      {!telegram && (
+      {!max && (
         <p className="mt-4 rounded-xl bg-onbutton/10 px-4 py-3 text-sm text-textColor">
-          Telegram не настроен: в <code>.env</code> пусты{" "}
-          <code>TELEGRAM_BOT_TOKEN</code> или <code>TELEGRAM_CHAT_ID</code>.
-          Заявки при этом всё равно сохраняются и видны в разделе «Заявки».
+          Бот MAX не настроен: в <code>.env</code> пусты{" "}
+          <code>MAX_BOT_TOKEN</code> или <code>MAX_CHAT_ID</code>. Заявки при
+          этом всё равно сохраняются и видны в разделе «Заявки».
         </p>
       )}
 
@@ -50,7 +50,7 @@ export function NotificationStatus({
         <button
           type="button"
           onClick={onTest}
-          disabled={pending || !telegram}
+          disabled={pending || !max}
           className="rounded-full bg-textColorDark px-5 py-2.5 text-sm font-semibold text-mainColor transition-colors hover:bg-onbutton hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
         >
           {pending ? "Отправляем…" : "Отправить тестовое сообщение"}

@@ -76,7 +76,7 @@ export async function POST(req: Request) {
         source: "site/contact-form",
       },
     });
-    // Notify manager (email + telegram). Non-blocking failures are tolerated.
+    // Notify manager (email + MAX). Non-blocking failures are tolerated.
     await notifyContact({ name, phone, email, message });
     return NextResponse.json({ result: "success", info: "Заявка сохранена" });
   } catch {

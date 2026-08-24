@@ -31,9 +31,10 @@ const envSchema = z.object({
   MAIL_FROM: z.string().optional(),
   MAIL_TO: z.string().optional(),
 
-  // Telegram (optional until stage 2)
-  TELEGRAM_BOT_TOKEN: z.string().optional(),
-  TELEGRAM_CHAT_ID: z.string().optional(),
+  // MAX bot (order notifications). Optional — without it the site still
+  // stores every submission, it just does not ping anyone.
+  MAX_BOT_TOKEN: z.string().optional(),
+  MAX_CHAT_ID: z.string().optional(),
 
   // Uploads
   UPLOAD_DIR: z.string().default("./uploads"),

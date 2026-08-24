@@ -17,14 +17,19 @@ PROJECT_DIR="$(pwd)"
 log()  { printf '%s  %s\n' "$(date '+%Y-%m-%d %H:%M:%S')" "$1"; }
 fail() { log "ОШИБКА: $1"; notify "❌ Бэкап birkityt не создан: $1"; exit 1; }
 
-# Optional Telegram alert. Reuses the bot already configured for order
-# notifications; silently does nothing when it is not set up.
+# Optional MAX alert. Reuses the bot configured for order notifications;
+# silently does nothing when it is not set up.
 notify() {
-  [ -n "${TELEGRAM_BOT_TOKEN:-}" ] && [ -n "${TELEGRAM_CHAT_ID:-}" ] || return 0
+  [ -n "${MAX_BOT_TOKEN:-}" ] && [ -n "${MAX_CHAT_ID:-}" ] || return 0
+  command -v python3 >/dev/null 2>&1 || return 0
+  # Build the JSON with python so quotes in the message cannot break it.
+  payload=$(printf '%s' "$1" | python3 -c 'import json,sys; print(json.dumps({"text": sys.stdin.read()}))')
+  # Token in a header, chat in the query string — see https://dev.max.ru/docs-api
   curl -fsS -m 15 -X POST \
-    "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
-    -d "chat_id=${TELEGRAM_CHAT_ID}" \
-    --data-urlencode "text=$1" >/dev/null 2>&1 || true
+    -H "Authorization: ${MAX_BOT_TOKEN}" \
+    -H "Content-Type: application/json" \
+    --data-raw "$payload" \
+    "https://platform-api2.max.ru/messages?chat_id=${MAX_CHAT_ID}" >/dev/null 2>&1 || true
 }
 
 [ -f .env ] || fail ".env не найден в $PROJECT_DIR"
