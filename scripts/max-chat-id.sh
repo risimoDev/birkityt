@@ -63,11 +63,15 @@ esac
 echo
 echo "==> Забираю последние события (GET /updates)"
 echo "    Если список пуст — напишите боту в MAX любое сообщение и повторите."
-UPDATES="$(curl -fsS -m 40 -H "Authorization: $TOKEN" \
-  "$API/updates?limit=100&timeout=30" || true)"
+ERRFILE="$(mktemp)"
+UPDATES="$(curl -sS -m 40 $CA_ARGS -H "Authorization: $TOKEN" \
+  "$API/updates?limit=100&timeout=30" 2>"$ERRFILE" || true)"
+ERR="$(cat "$ERRFILE")"
+rm -f "$ERRFILE"
 
 if [ -z "$UPDATES" ]; then
-  echo "Не удалось получить обновления." >&2
+  echo "Не удалось получить события." >&2
+  if [ -n "$ERR" ]; then echo "$ERR" | sed 's/^/    /' >&2; fi
   exit 1
 fi
 
