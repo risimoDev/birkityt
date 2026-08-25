@@ -24,13 +24,41 @@ fi
 
 API="https://platform-api2.max.ru"
 
-echo "==> Проверяю токен (GET /me)"
-ME="$(curl -fsS -m 15 -H "Authorization: $TOKEN" "$API/me" || true)"
-if [ -z "$ME" ]; then
-  echo "Токен не принят. Проверьте, что скопировали его целиком." >&2
-  exit 1
+# max.ru is signed by the Russian Trusted Root CA, which most systems do not
+# ship. Point curl at the copy in the repository instead of requiring every
+# machine to install it. See docs/notifications.md.
+CA_ARGS=""
+if [ -f certs/russian-trusted-ca.pem ]; then
+  CA_ARGS="--cacert certs/russian-trusted-ca.pem"
 fi
-echo "    $ME"
+
+echo "==> Проверяю токен (GET /me)"
+# Separate the HTTP status from the body so a TLS failure (code 000) is not
+# reported as a bad token — they need completely different fixes.
+# curl's diagnostics must stay out of the captured body, or they get mistaken
+# for the status line appended by -w.
+ERRFILE="$(mktemp)"
+RESP="$(curl -sS -m 15 $CA_ARGS -w $'
+%{http_code}'   -H "Authorization: $TOKEN" "$API/me" 2>"$ERRFILE" || true)"
+CODE="$(printf '%s' "$RESP" | tail -1)"
+ME="$(printf '%s' "$RESP" | sed '$d')"
+ERR="$(cat "$ERRFILE")"
+rm -f "$ERRFILE"
+
+case "$CODE" in
+  200) echo "    $ME" ;;
+  401)
+    echo "Токен отклонён (401). Проверьте, что скопировали его целиком." >&2
+    exit 1 ;;
+  *)
+    echo "Не удалось обратиться к API (код: ${CODE:-нет ответа})." >&2
+    if [ -n "$ERR" ]; then echo "$ERR" | sed 's/^/    /' >&2; fi
+    echo >&2
+    echo "Если в ответе упоминается сертификат — на этой машине нет корневого" >&2
+    echo "сертификата Минцифры. Запускайте скрипт из корня проекта, где лежит" >&2
+    echo "certs/russian-trusted-ca.pem, либо см. docs/notifications.md." >&2
+    exit 1 ;;
+esac
 
 echo
 echo "==> Забираю последние события (GET /updates)"

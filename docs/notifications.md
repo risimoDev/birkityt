@@ -67,6 +67,41 @@ MAX_CHAT_ID="-1001234567890"   Заявки БИРКИТУТ
 Токен берётся из `.env`; можно передать его первым аргументом, если `.env` ещё
 не заполнен.
 
+## Сертификат Минцифры
+
+`platform-api2.max.ru` использует сертификат, выпущенный **Russian Trusted
+Root CA** (Минцифры). Этого корня нет ни в стандартном наборе Debian/Alpine,
+ни во встроенном хранилище Node.js, поэтому без дополнительной настройки любое
+обращение к API падает:
+
+```
+curl:  SSL certificate problem: unable to get local issuer certificate
+node:  UNABLE_TO_GET_ISSUER_CERT_LOCALLY
+```
+
+Корневой и промежуточный сертификаты лежат в репозитории:
+[`certs/russian-trusted-ca.pem`](../certs/russian-trusted-ca.pem) (скачаны с
+официального <https://gu-st.ru/content/Other/doc/russiantrustedca.pem>).
+
+* **Контейнер** — [`Dockerfile`](../Dockerfile) копирует файл в образ и
+  выставляет `NODE_EXTRA_CA_CERTS`. Эта переменная *добавляет* сертификат к
+  стандартным, а не заменяет их, так что остальные HTTPS-запросы не страдают.
+* **Скрипты** — `max-chat-id.sh` и `backup.sh` передают curl
+  `--cacert certs/russian-trusted-ca.pem`. Поэтому запускать их нужно **из
+  корня проекта**.
+
+Устанавливать сертификат в систему не обязательно. Если всё же хочется, чтобы
+его видели все программы на сервере:
+
+```bash
+sudo cp certs/russian-trusted-ca.pem \
+  /usr/local/share/ca-certificates/russian-trusted-ca.crt
+sudo update-ca-certificates
+```
+
+Сертификат сайта обновляется примерно раз в год, но корень действует намного
+дольше — файл в репозитории трогать не придётся.
+
 ## Настройка
 
 В `.env` на сервере:

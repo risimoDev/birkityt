@@ -39,6 +39,13 @@ RUN apk add --no-cache openssl \
   && addgroup --system --gid 1001 nodejs \
   && adduser --system --uid 1001 nextjs
 
+# platform-api2.max.ru is signed by the Russian Trusted Root CA, which is in
+# neither Alpine's ca-certificates nor Node's bundled store. Without this,
+# every notification fails with UNABLE_TO_GET_ISSUER_CERT_LOCALLY.
+# NODE_EXTRA_CA_CERTS adds it on top of the defaults rather than replacing them.
+COPY certs/russian-trusted-ca.pem /etc/ssl/certs/russian-trusted-ca.pem
+ENV NODE_EXTRA_CA_CERTS=/etc/ssl/certs/russian-trusted-ca.pem
+
 COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static

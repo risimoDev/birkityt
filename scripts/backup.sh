@@ -25,7 +25,12 @@ notify() {
   # Build the JSON with python so quotes in the message cannot break it.
   payload=$(printf '%s' "$1" | python3 -c 'import json,sys; print(json.dumps({"text": sys.stdin.read()}))')
   # Token in a header, chat in the query string — see https://dev.max.ru/docs-api
-  curl -fsS -m 15 -X POST \
+  # max.ru uses the Russian Trusted Root CA — see docs/notifications.md
+  CA_ARGS=""
+  if [ -f certs/russian-trusted-ca.pem ]; then
+    CA_ARGS="--cacert certs/russian-trusted-ca.pem"
+  fi
+  curl -fsS -m 15 $CA_ARGS -X POST \
     -H "Authorization: ${MAX_BOT_TOKEN}" \
     -H "Content-Type: application/json" \
     --data-raw "$payload" \
