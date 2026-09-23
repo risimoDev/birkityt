@@ -49,10 +49,14 @@ export function writeConsent(value: Consent): void {
 }
 
 /** Fire a conversion goal. Safe to call before the counter has loaded. */
-export function reachGoal(goal: Goal): void {
+export function reachGoal(goal: Goal, params?: Record<string, unknown>): void {
   if (!METRIKA_ID) return;
   try {
-    window.ym?.(Number(METRIKA_ID), "reachGoal", goal);
+    if (params) {
+      window.ym?.(Number(METRIKA_ID), "reachGoal", goal, params);
+    } else {
+      window.ym?.(Number(METRIKA_ID), "reachGoal", goal);
+    }
   } catch {
     /* analytics must never break the UI */
   }

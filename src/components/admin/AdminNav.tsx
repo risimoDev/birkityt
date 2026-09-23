@@ -15,6 +15,7 @@ const LINKS: { href: string; label: string; adminOnly?: boolean }[] = [
   { href: "/admin/calc", label: "Калькулятор" },
   { href: "/admin/materials", label: "Материалы" },
   { href: "/admin/works", label: "Работы" },
+  { href: "/admin/reviews", label: "Отзывы" },
   { href: "/admin/media", label: "Медиа" },
   { href: "/admin/seo", label: "SEO" },
   { href: "/admin/users", label: "Пользователи", adminOnly: true },

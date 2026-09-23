@@ -52,6 +52,19 @@ export function Hero({ content, samples }: { content: ContentMap; samples?: stri
       <div className="mx-auto grid max-w-6xl items-center gap-12 px-4 pb-20 pt-14 sm:px-6 lg:grid-cols-[1.05fr_0.95fr] lg:pb-28 lg:pt-20">
         {/* left */}
         <div className="relative z-10">
+          {/* UTP badges */}
+          <div className="mb-4 flex flex-wrap gap-2">
+            <span className="rounded-md border border-textColorDark/15 bg-white/60 px-2.5 py-1 font-mono text-[11px] font-semibold text-textColorDark">
+              ✓ тираж от 30 шт / 1000 ₽
+            </span>
+            <span className="rounded-md border border-textColorDark/15 bg-white/60 px-2.5 py-1 font-mono text-[11px] font-semibold text-textColorDark">
+              ✓ макет в подарок
+            </span>
+            <span className="rounded-md border border-textColorDark/15 bg-white/60 px-2.5 py-1 font-mono text-[11px] font-semibold text-textColorDark">
+              ✓ печать за 2–3 дня
+            </span>
+          </div>
+
           <TagShape tone="cream" notch={false} className="mb-7 text-xs font-semibold uppercase tracking-wide">
             {eyebrow}
           </TagShape>
@@ -87,6 +100,13 @@ export function Hero({ content, samples }: { content: ContentMap; samples?: stri
               {ctaSecondary}
             </Link>
           </div>
+
+          <p className="mt-3 text-xs text-textColor/70">
+            💡 Нет готового макета?{" "}
+            <Link href="/#contact" className="font-semibold text-onbutton underline underline-offset-2">
+              Подготовим бесплатно при заказе
+            </Link>
+          </p>
 
           {/* micro stat row */}
           <dl className="mt-12 flex flex-wrap gap-x-10 gap-y-4">

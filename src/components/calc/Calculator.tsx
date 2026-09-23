@@ -95,7 +95,7 @@ export function Calculator({
       if (!res.ok || json.result !== "success") {
         throw new Error(json.info || "Не удалось отправить заявку");
       }
-      reachGoal("form_submit");
+      reachGoal("form_submit", { order_price: quote.total });
       router.push("/success");
     } catch (err) {
       setStatus("error");

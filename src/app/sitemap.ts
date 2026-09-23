@@ -13,6 +13,16 @@ const ROUTES: { path: string; priority: number; changeFrequency: "daily" | "week
   { path: "/calc", priority: 0.9, changeFrequency: "monthly" },
   { path: "/materials", priority: 0.8, changeFrequency: "monthly" },
   { path: "/works", priority: 0.8, changeFrequency: "weekly" },
+  { path: "/about", priority: 0.7, changeFrequency: "monthly" },
+  { path: "/tkanevye-birki", priority: 0.9, changeFrequency: "weekly" },
+  { path: "/silikonovye-birki", priority: 0.9, changeFrequency: "weekly" },
+  { path: "/navesnye-birki", priority: 0.9, changeFrequency: "weekly" },
+  { path: "/etiketki-dlya-odezhdy", priority: 0.9, changeFrequency: "weekly" },
+  { path: "/sostavniki-razmerniki", priority: 0.9, changeFrequency: "weekly" },
+  { path: "/nakleyki", priority: 0.8, changeFrequency: "weekly" },
+  { path: "/upakovochnaya-lenta", priority: 0.8, changeFrequency: "weekly" },
+  { path: "/imennye-birki", priority: 0.8, changeFrequency: "weekly" },
+  { path: "/perm", priority: 0.9, changeFrequency: "weekly" },
   { path: "/privacy", priority: 0.2, changeFrequency: "yearly" },
 ];
 

@@ -72,6 +72,10 @@ model Work {
   id            String    @id @default(cuid())
   title         String?
   description   String?
+  material      String?
+  printType     String?
+  size          String?
+  clientNiche   String?
   imageWebp     String
   imageOriginal String?
   category      Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
@@ -81,6 +85,20 @@ model Work {
 
   @@index([categoryId])
   @@index([createdAt])
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  name      String
+  brand     String?
+  brandUrl  String?
+  avatar    String?
+  text      String
+  rating    Int      @default(5)
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+
+  @@index([sortOrder])
 }
 
 // Replaces content.json: flat key -> value text store.
