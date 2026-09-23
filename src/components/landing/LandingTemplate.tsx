@@ -3,7 +3,6 @@ import { PageHeader } from "@/components/site/PageHeader";
 import { GoalLink } from "@/components/site/GoalLink";
 import { ContactSection } from "@/components/home/ContactSection";
 import { Faq, type FaqItem } from "@/components/home/Faq";
-import { Guarantees } from "@/components/home/Guarantees";
 import { Gallery } from "@/components/works/Gallery";
 import type { PriceGroupDTO } from "@/lib/prices";
 import type { WorkDTO } from "@/lib/works";
@@ -42,14 +41,14 @@ export function LandingTemplate({ config }: { config: LandingConfig }) {
                 ✓ от 30 штук
               </span>
               <span className="rounded-md border border-textColorDark/15 bg-onbutton/10 px-2.5 py-1 font-mono text-[11px] font-semibold text-textColorDark">
-                ✓ макет бесплатно
+                ✓ печать 2–3 дня
               </span>
               <span className="rounded-md border border-textColorDark/15 bg-onbutton/10 px-2.5 py-1 font-mono text-[11px] font-semibold text-textColorDark">
-                ✓ печать 2–3 дня
+                ✓ доставка по всей РФ
               </span>
             </div>
             <p className="text-sm text-textColor/80">
-              Подготовим аккуратный макет по вашему брифу и отправим СДЭК / Почтой по всей РФ.
+              Выполним печать по вашему макету и отправим СДЭК / Почтой по всей РФ и СНГ.
             </p>
           </div>
           <GoalLink
@@ -143,8 +142,6 @@ export function LandingTemplate({ config }: { config: LandingConfig }) {
           <Gallery works={config.works} />
         </section>
       )}
-
-      <Guarantees />
 
       {/* FAQ */}
       {config.faqItems.length > 0 && (

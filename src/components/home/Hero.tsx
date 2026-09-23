@@ -58,10 +58,10 @@ export function Hero({ content, samples }: { content: ContentMap; samples?: stri
               ✓ тираж от 30 шт / 1000 ₽
             </span>
             <span className="rounded-md border border-textColorDark/15 bg-white/60 px-2.5 py-1 font-mono text-[11px] font-semibold text-textColorDark">
-              ✓ макет в подарок
+              ✓ печать за 2–3 дня
             </span>
             <span className="rounded-md border border-textColorDark/15 bg-white/60 px-2.5 py-1 font-mono text-[11px] font-semibold text-textColorDark">
-              ✓ печать за 2–3 дня
+              ✓ доставка по РФ и СНГ
             </span>
           </div>
 
@@ -100,13 +100,6 @@ export function Hero({ content, samples }: { content: ContentMap; samples?: stri
               {ctaSecondary}
             </Link>
           </div>
-
-          <p className="mt-3 text-xs text-textColor/70">
-            💡 Нет готового макета?{" "}
-            <Link href="/#contact" className="font-semibold text-onbutton underline underline-offset-2">
-              Подготовим бесплатно при заказе
-            </Link>
-          </p>
 
           {/* micro stat row */}
           <dl className="mt-12 flex flex-wrap gap-x-10 gap-y-4">

@@ -4,7 +4,6 @@ import { pageMetadata } from "@/lib/seo";
 import { PageHeader } from "@/components/site/PageHeader";
 import { getSettings, setting } from "@/lib/settings";
 import { LEGAL } from "@/lib/legal";
-import { Guarantees } from "@/components/home/Guarantees";
 
 export const dynamic = "force-dynamic";
 
@@ -77,8 +76,6 @@ export default async function AboutPage() {
           </div>
         </div>
       </section>
-
-      <Guarantees />
 
       <section className="mx-auto max-w-4xl px-4 py-16 text-center sm:px-6">
         <h2 className="text-2xl font-bold text-textColorDark">Готовы приступить к вашему заказу?</h2>

@@ -88,17 +88,19 @@ model Work {
 }
 
 model Review {
-  id        String   @id @default(cuid())
-  name      String
-  brand     String?
-  brandUrl  String?
-  avatar    String?
-  text      String
-  rating    Int      @default(5)
-  sortOrder Int      @default(0)
-  createdAt DateTime @default(now())
+  id          String   @id @default(cuid())
+  name        String
+  brand       String?
+  brandUrl    String?
+  avatar      String?
+  text        String
+  rating      Int      @default(5)
+  isPublished Boolean  @default(false)
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
 
   @@index([sortOrder])
+  @@index([isPublished])
 }
 
 // Replaces content.json: flat key -> value text store.

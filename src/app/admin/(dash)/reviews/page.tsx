@@ -1,10 +1,10 @@
-import { getReviews } from "@/lib/reviews";
+import { getAllReviewsForAdmin } from "@/lib/reviews";
 import { ReviewsManager } from "@/components/admin/ReviewsManager";
 
 export const dynamic = "force-dynamic";
 
 export default async function AdminReviewsPage() {
-  const reviews = await getReviews();
+  const reviews = await getAllReviewsForAdmin();
 
   return (
     <div className="space-y-6">

@@ -16,6 +16,7 @@ export async function createReview(
   brand?: string,
   brandUrl?: string,
   rating?: number,
+  isPublished: boolean = true,
 ): Promise<{ ok: boolean; info?: string }> {
   await requireSession();
   const n = name.trim().slice(0, 100);
@@ -30,6 +31,7 @@ export async function createReview(
       brand: brand?.trim() || null,
       brandUrl: brandUrl?.trim() || null,
       rating: rating ?? 5,
+      isPublished,
       sortOrder: (max._max?.sortOrder ?? -1) + 1,
     },
   });
@@ -44,11 +46,19 @@ const updateSchema = z.object({
   brand: z.string().trim().optional().nullable(),
   brandUrl: z.string().trim().optional().nullable(),
   rating: z.number().int().min(1).max(5).optional(),
+  isPublished: z.boolean().optional(),
 });
 
 export async function updateReview(
   id: string,
-  data: { name: string; text: string; brand?: string; brandUrl?: string; rating?: number },
+  data: {
+    name: string;
+    text: string;
+    brand?: string;
+    brandUrl?: string;
+    rating?: number;
+    isPublished?: boolean;
+  },
 ): Promise<{ ok: boolean; info?: string }> {
   await requireSession();
   const parsed = updateSchema.safeParse({ id, ...data });
@@ -63,7 +73,21 @@ export async function updateReview(
       brand: parsed.data.brand || null,
       brandUrl: parsed.data.brandUrl || null,
       rating: parsed.data.rating ?? 5,
+      ...(parsed.data.isPublished !== undefined ? { isPublished: parsed.data.isPublished } : {}),
     },
+  });
+  refresh();
+  return { ok: true };
+}
+
+export async function togglePublishReview(
+  id: string,
+  isPublished: boolean,
+): Promise<{ ok: boolean }> {
+  await requireSession();
+  await (prisma as any).review.update({
+    where: { id },
+    data: { isPublished },
   });
   refresh();
   return { ok: true };

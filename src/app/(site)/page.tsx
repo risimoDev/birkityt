@@ -2,7 +2,6 @@ import { Hero } from "@/components/home/Hero";
 import { MaterialsMarquee } from "@/components/home/MaterialsMarquee";
 import { Advantages } from "@/components/home/Advantages";
 import { About } from "@/components/home/About";
-import { Guarantees } from "@/components/home/Guarantees";
 import { Reviews } from "@/components/home/Reviews";
 import { Faq, type FaqItem } from "@/components/home/Faq";
 import { ContactSection } from "@/components/home/ContactSection";
@@ -73,7 +72,6 @@ export default async function HomePage() {
       <Hero content={content} samples={mediaSrcs(settings, HERO_SLOTS)} />
       <MaterialsMarquee items={marquee} />
       <Advantages content={content} />
-      <Guarantees />
       <About content={content} photos={mediaSrcs(settings, ABOUT_SLOTS)} />
       <Reviews reviews={reviews} />
       <Faq
