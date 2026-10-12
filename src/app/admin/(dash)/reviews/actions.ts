@@ -120,3 +120,25 @@ export async function moveReview(id: string, dir: "up" | "down") {
   );
   refresh();
 }
+
+export async function seedDefaultReviews(): Promise<{ ok: boolean }> {
+  await requireSession();
+  const { DEFAULT_REVIEWS } = await import("@/lib/reviews");
+  const count = await (prisma as any).review.count();
+  if (count === 0) {
+    for (const r of DEFAULT_REVIEWS) {
+      await (prisma as any).review.create({
+        data: {
+          name: r.name,
+          brand: r.brand,
+          text: r.text,
+          rating: r.rating,
+          isPublished: true,
+          sortOrder: r.sortOrder,
+        },
+      });
+    }
+  }
+  refresh();
+  return { ok: true };
+}

@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import { SafeImage } from "@/components/ui/SafeImage";
 import { useActionState, useTransition } from "react";
 import { uploadMedia, resetMedia } from "@/app/admin/(dash)/media/actions";
 
@@ -39,7 +39,7 @@ function Slot({ slot }: { slot: MediaSlotView }) {
   return (
     <div className="rounded-2xl border border-textColorDark/10 bg-white/70 p-3">
       <div className="relative mb-2 aspect-square overflow-hidden rounded-xl bg-mainColor">
-        <Image src={slot.src} alt={slot.label} fill sizes="220px" className="object-cover" />
+        <SafeImage src={slot.src} alt={slot.label} fill sizes="220px" className="object-cover" />
       </div>
       <div className="mb-2 text-sm font-medium text-textColorDark">{slot.label}</div>
       <form action={formAction} className="space-y-2">

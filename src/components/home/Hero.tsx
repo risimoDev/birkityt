@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Image from "next/image";
+import { SafeImage } from "@/components/ui/SafeImage";
 import { type ContentMap, pick } from "@/lib/content";
 import { TagShape } from "@/components/site/Stitch";
 import { GoalLink } from "@/components/site/GoalLink";
@@ -133,8 +133,9 @@ export function Hero({ content, samples }: { content: ContentMap; samples?: stri
                 <div className="relative rounded-2xl border border-textColorDark/10 bg-white p-2 shadow-xl [clip-path:polygon(16px_0,100%_0,100%_100%,0_100%,0_16px)]">
                   {/* eyelet */}
                   <span className="absolute left-3 top-3 z-10 h-3 w-3 rounded-full border-2 border-textColorDark/30 bg-mainColor" />
-                  <Image
+                  <SafeImage
                     src={src}
+                    fallbackSrc={SAMPLES[i]}
                     alt={SAMPLE_ALTS[i]}
                     width={208}
                     height={208}

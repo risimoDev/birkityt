@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { SafeImage } from "@/components/ui/SafeImage";
 import { type ContentMap, pick } from "@/lib/content";
 
 const ABOUT_PHOTOS = [
@@ -33,23 +33,26 @@ export function About({ content, photos }: { content: ContentMap; photos?: strin
       <div className="mx-auto grid max-w-6xl items-start gap-12 px-4 py-20 sm:px-6 lg:grid-cols-2">
         {/* collage */}
         <div className="relative grid grid-cols-2 gap-4 lg:sticky lg:top-28">
-          <Image
+          <SafeImage
             src={imgs[0]}
+            fallbackSrc={ABOUT_PHOTOS[0]}
             alt={ABOUT_ALTS[0]}
             width={400}
             height={500}
             className="aspect-[4/5] w-full rounded-2xl object-cover"
           />
-          <Image
+          <SafeImage
             src={imgs[1]}
+            fallbackSrc={ABOUT_PHOTOS[1]}
             alt={ABOUT_ALTS[1]}
             width={400}
             height={500}
             className="aspect-[4/5] w-full rounded-2xl object-cover"
           />
           <div className="col-span-2">
-            <Image
+            <SafeImage
               src={imgs[2]}
+              fallbackSrc={ABOUT_PHOTOS[2]}
               alt={ABOUT_ALTS[2]}
               width={800}
               height={300}

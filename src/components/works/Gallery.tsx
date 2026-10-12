@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import Image from "next/image";
+import { SafeImage } from "@/components/ui/SafeImage";
 import type { WorkDTO } from "@/lib/works";
 import { cn } from "@/lib/cn";
 
@@ -68,7 +68,7 @@ export function Gallery({ works }: { works: WorkDTO[] }) {
             onClick={() => setIndex(i)}
             className="group relative aspect-square overflow-hidden rounded-2xl border border-textColorDark/10 bg-white"
           >
-            <Image
+            <SafeImage
               src={w.image}
               alt={altFor(w)}
               fill
@@ -133,7 +133,7 @@ export function Gallery({ works }: { works: WorkDTO[] }) {
               className="relative max-h-[85vh] w-auto max-w-[92vw]"
               onClick={(e) => e.stopPropagation()}
             >
-              <Image
+              <SafeImage
                 src={active.image}
                 alt={altFor(active)}
                 width={1200}

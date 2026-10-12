@@ -13,7 +13,7 @@ export type ReviewDTO = {
   createdAt?: Date;
 };
 
-const DEFAULT_REVIEWS: ReviewDTO[] = [
+export const DEFAULT_REVIEWS: ReviewDTO[] = [
   {
     id: "default-1",
     name: "Екатерина В.",

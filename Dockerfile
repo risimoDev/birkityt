@@ -35,7 +35,7 @@ CMD ["npx", "prisma", "migrate", "deploy"]
 FROM node:22-alpine AS runner
 WORKDIR /app
 ENV NODE_ENV=production
-RUN apk add --no-cache openssl \
+RUN apk add --no-cache libc6-compat openssl \
   && addgroup --system --gid 1001 nodejs \
   && adduser --system --uid 1001 nextjs
 
@@ -46,13 +46,15 @@ RUN apk add --no-cache openssl \
 COPY certs/russian-trusted-ca.pem /etc/ssl/certs/russian-trusted-ca.pem
 ENV NODE_EXTRA_CA_CERTS=/etc/ssl/certs/russian-trusted-ca.pem
 
-COPY --from=builder /app/public ./public
+COPY --from=builder --chown=nextjs:nodejs /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 # Prisma Client runtime (generated client + query engine). The Prisma CLI and
 # migrations are not needed here — they run in the `tools` container.
 COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
+COPY --from=builder /app/node_modules/sharp ./node_modules/sharp
+COPY --from=builder /app/node_modules/@img ./node_modules/@img
 COPY --from=builder /app/package.json ./package.json
 
 RUN mkdir -p /app/uploads && chown -R nextjs:nodejs /app/uploads

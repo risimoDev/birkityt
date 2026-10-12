@@ -37,8 +37,8 @@ for i in $(seq 1 30); do
   sleep 2
 done
 
-log "Применение миграций БД"
-$DC --profile tools run --rm tools npx prisma migrate deploy
+log "Применение миграций БД и проверка каталога"
+$DC --profile tools run --rm tools sh -c "npx prisma migrate deploy && npm run migrate:legacy"
 
 log "Перезапуск веб-приложения и Caddy"
 $DC up -d web caddy

@@ -7,6 +7,7 @@ import {
   togglePublishReview,
   deleteReview,
   moveReview,
+  seedDefaultReviews,
 } from "@/app/admin/(dash)/reviews/actions";
 import type { ReviewDTO } from "@/lib/reviews";
 
@@ -100,6 +101,12 @@ export function ReviewsManager({ initial }: { initial: ReviewDTO[] }) {
 
   async function handleMove(id: string, dir: "up" | "down") {
     await moveReview(id, dir);
+    window.location.reload();
+  }
+
+  async function handleSeed() {
+    setStatusMsg("");
+    await seedDefaultReviews();
     window.location.reload();
   }
 
@@ -251,10 +258,21 @@ export function ReviewsManager({ initial }: { initial: ReviewDTO[] }) {
         </h2>
 
         {filteredItems.length === 0 ? (
-          <div className="rounded-2xl border border-dashed border-textColorDark/20 bg-white p-8 text-center text-sm text-textColor/60">
-            {activeTab === "pending"
-              ? "Нет отзывов, ожидающих модерации."
-              : "Отзывы отсутствуют."}
+          <div className="rounded-2xl border border-dashed border-textColorDark/20 bg-white p-8 text-center text-sm text-textColor/60 space-y-3">
+            <p>
+              {activeTab === "pending"
+                ? "Нет отзывов, ожидающих модерации."
+                : "В базе данных пока нет отзывов."}
+            </p>
+            {activeTab !== "pending" && (
+              <button
+                type="button"
+                onClick={handleSeed}
+                className="rounded-full bg-textColorDark px-5 py-2 text-xs font-semibold text-mainColor hover:bg-onbutton hover:text-white transition-colors"
+              >
+                Загрузить стартовые примеры отзывов
+              </button>
+            )}
           </div>
         ) : (
           filteredItems.map((item, idx) => {

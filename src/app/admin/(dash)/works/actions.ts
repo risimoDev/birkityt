@@ -1,5 +1,7 @@
 "use server";
 
+import { readdirSync, existsSync } from "node:fs";
+import { resolve } from "node:path";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
@@ -136,3 +138,34 @@ export async function deleteWork(id: string) {
   await deleteUpload(work.imageWebp); // no-op for seeded /images/works files
   refresh();
 }
+
+export async function seedDefaultWorks(): Promise<{ ok: boolean; added: number; info?: string }> {
+  await requireSession();
+  const dir = resolve(process.cwd(), "public/images/works");
+  if (!existsSync(dir)) {
+    return { ok: false, added: 0, info: "Папка public/images/works не найдена" };
+  }
+  const files = readdirSync(dir).filter((f) => f.endsWith(".webp"));
+  if (files.length === 0) {
+    return { ok: false, added: 0, info: "В папке public/images/works нет файлов webp" };
+  }
+  const max = await prisma.work.aggregate({ _max: { sortOrder: true } });
+  let order = (max._max.sortOrder ?? -1) + 1;
+  let added = 0;
+  for (const f of files) {
+    const imageWebp = `/images/works/${f}`;
+    const exists = await prisma.work.findFirst({ where: { imageWebp } });
+    if (exists) continue;
+    await prisma.work.create({
+      data: {
+        title: "Пример работы",
+        imageWebp,
+        sortOrder: order++,
+      },
+    });
+    added++;
+  }
+  refresh();
+  return { ok: true, added };
+}
+

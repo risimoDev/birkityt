@@ -1,8 +1,8 @@
 "use client";
 
-import Image from "next/image";
 import { useActionState, useState, useTransition } from "react";
-import { uploadWork, updateWork, deleteWork } from "@/app/admin/(dash)/works/actions";
+import { SafeImage } from "@/components/ui/SafeImage";
+import { uploadWork, updateWork, deleteWork, seedDefaultWorks } from "@/app/admin/(dash)/works/actions";
 
 export type WorkRow = {
   id: string;
@@ -22,13 +22,41 @@ export function WorksManager({
   categories: CategoryOption[];
 }) {
   const [error, formAction] = useActionState(uploadWork, undefined);
+  const [seeding, startSeed] = useTransition();
+  const [seedInfo, setSeedInfo] = useState<string | null>(null);
+
+  const handleSeed = () => {
+    startSeed(async () => {
+      const res = await seedDefaultWorks();
+      if (res.ok) {
+        setSeedInfo(`Добавлено работ: ${res.added}`);
+      } else {
+        setSeedInfo(res.info ?? "Ошибка добавления");
+      }
+    });
+  };
 
   return (
     <div className="space-y-8">
       <section>
-        <h2 className="mb-3 font-mono text-xs uppercase tracking-widest text-onbutton">
-          Загрузить работу
-        </h2>
+        <div className="mb-3 flex items-center justify-between">
+          <h2 className="font-mono text-xs uppercase tracking-widest text-onbutton">
+            Загрузить работу
+          </h2>
+          <button
+            type="button"
+            disabled={seeding}
+            onClick={handleSeed}
+            className="rounded-lg border border-textColorDark/20 bg-white px-3 py-1.5 text-xs font-semibold text-textColorDark hover:bg-mainColor/30 disabled:opacity-50"
+          >
+            {seeding ? "Загрузка..." : "↻ Загрузить базовые примеры из архива"}
+          </button>
+        </div>
+        {seedInfo && (
+          <div className="mb-3 text-xs text-onbutton font-medium">
+            {seedInfo}
+          </div>
+        )}
         <form
           action={formAction}
           className="grid gap-3 rounded-2xl border border-textColorDark/10 bg-white/70 p-5 sm:grid-cols-2"
@@ -67,9 +95,17 @@ export function WorksManager({
             <WorkCard key={w.id} w={w} categories={categories} />
           ))}
           {works.length === 0 && (
-            <p className="col-span-full rounded-2xl border border-dashed border-textColorDark/20 p-10 text-center text-textColor">
-              Работ пока нет.
-            </p>
+            <div className="col-span-full rounded-2xl border border-dashed border-textColorDark/20 p-10 text-center text-textColor">
+              <p>Работ пока нет.</p>
+              <button
+                type="button"
+                disabled={seeding}
+                onClick={handleSeed}
+                className="mt-3 rounded-xl bg-textColorDark px-4 py-2 text-xs font-semibold text-mainColor hover:bg-onbutton hover:text-white"
+              >
+                Загрузить 27 готовых примеров работ
+              </button>
+            </div>
           )}
         </div>
       </section>
@@ -87,7 +123,7 @@ function WorkCard({ w, categories }: { w: WorkRow; categories: CategoryOption[] 
   return (
     <div className="rounded-2xl border border-textColorDark/10 bg-white/70 p-3">
       <div className="relative mb-2 aspect-square overflow-hidden rounded-xl bg-mainColor">
-        <Image src={w.image} alt={w.title || "Работа"} fill sizes="200px" className="object-cover" />
+        <SafeImage src={w.image} alt={w.title || "Работа"} fill sizes="200px" className="object-cover" />
       </div>
       <input
         value={title}
