@@ -1,12 +1,9 @@
 import type { Metadata } from "next";
-import { Manrope } from "next/font/google";
+import "@fontsource/manrope/400.css";
+import "@fontsource/manrope/600.css";
+import "@fontsource/manrope/700.css";
+import "@fontsource/manrope/800.css";
 import "./globals.css";
-
-const manrope = Manrope({
-  subsets: ["latin", "cyrillic"],
-  weight: ["400", "600", "700", "800"],
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   title: "БИРКИТУТ — изготовление бирок для одежды на заказ",
@@ -18,8 +15,8 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="ru" className={manrope.className}>
-      <body>{children}</body>
+    <html lang="ru">
+      <body className="font-sans">{children}</body>
     </html>
   );
 }
